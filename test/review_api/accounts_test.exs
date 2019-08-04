@@ -73,4 +73,71 @@ defmodule ReviewApi.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "schools" do
+    alias ReviewApi.Accounts.School
+
+    @valid_attrs %{city: "some city", email: "some email", name: "some name", phone: "some phone", street: "some street"}
+    @update_attrs %{city: "some updated city", email: "some updated email", name: "some updated name", phone: "some updated phone", street: "some updated street"}
+    @invalid_attrs %{city: nil, email: nil, name: nil, phone: nil, street: nil}
+
+    def school_fixture(attrs \\ %{}) do
+      {:ok, school} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_school()
+
+      school
+    end
+
+    test "list_schools/0 returns all schools" do
+      school = school_fixture()
+      assert Accounts.list_schools() == [school]
+    end
+
+    test "get_school!/1 returns the school with given id" do
+      school = school_fixture()
+      assert Accounts.get_school!(school.id) == school
+    end
+
+    test "create_school/1 with valid data creates a school" do
+      assert {:ok, %School{} = school} = Accounts.create_school(@valid_attrs)
+      assert school.city == "some city"
+      assert school.email == "some email"
+      assert school.name == "some name"
+      assert school.phone == "some phone"
+      assert school.street == "some street"
+    end
+
+    test "create_school/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_school(@invalid_attrs)
+    end
+
+    test "update_school/2 with valid data updates the school" do
+      school = school_fixture()
+      assert {:ok, %School{} = school} = Accounts.update_school(school, @update_attrs)
+      assert school.city == "some updated city"
+      assert school.email == "some updated email"
+      assert school.name == "some updated name"
+      assert school.phone == "some updated phone"
+      assert school.street == "some updated street"
+    end
+
+    test "update_school/2 with invalid data returns error changeset" do
+      school = school_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_school(school, @invalid_attrs)
+      assert school == Accounts.get_school!(school.id)
+    end
+
+    test "delete_school/1 deletes the school" do
+      school = school_fixture()
+      assert {:ok, %School{}} = Accounts.delete_school(school)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_school!(school.id) end
+    end
+
+    test "change_school/1 returns a school changeset" do
+      school = school_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_school(school)
+    end
+  end
 end
