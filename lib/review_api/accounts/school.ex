@@ -9,6 +9,8 @@ defmodule ReviewApi.Accounts.School do
     field :phone, :string
     field :street, :string
 
+    
+
     timestamps()
   end
 

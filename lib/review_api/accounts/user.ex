@@ -19,5 +19,6 @@ defmodule ReviewApi.Accounts.User do
     user
     |> cast(attrs, [:first_name, :last_name, :username, :exam_batch, :email, :password_hash, :role])
     |> validate_required([:first_name, :last_name, :username, :exam_batch, :email, :password_hash, :role])
+    |> unique_constraint(:email)
   end
 end
