@@ -258,4 +258,69 @@ defmodule ReviewApi.LectureTest do
       assert %Ecto.Changeset{} = Lecture.change_page(page)
     end
   end
+
+  describe "notes" do
+    alias ReviewApi.Lecture.Note
+
+    @valid_attrs %{completed: true, content: "some content", description: "some description", name: "some name"}
+    @update_attrs %{completed: false, content: "some updated content", description: "some updated description", name: "some updated name"}
+    @invalid_attrs %{completed: nil, content: nil, description: nil, name: nil}
+
+    def note_fixture(attrs \\ %{}) do
+      {:ok, note} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Lecture.create_note()
+
+      note
+    end
+
+    test "list_notes/0 returns all notes" do
+      note = note_fixture()
+      assert Lecture.list_notes() == [note]
+    end
+
+    test "get_note!/1 returns the note with given id" do
+      note = note_fixture()
+      assert Lecture.get_note!(note.id) == note
+    end
+
+    test "create_note/1 with valid data creates a note" do
+      assert {:ok, %Note{} = note} = Lecture.create_note(@valid_attrs)
+      assert note.completed == true
+      assert note.content == "some content"
+      assert note.description == "some description"
+      assert note.name == "some name"
+    end
+
+    test "create_note/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Lecture.create_note(@invalid_attrs)
+    end
+
+    test "update_note/2 with valid data updates the note" do
+      note = note_fixture()
+      assert {:ok, %Note{} = note} = Lecture.update_note(note, @update_attrs)
+      assert note.completed == false
+      assert note.content == "some updated content"
+      assert note.description == "some updated description"
+      assert note.name == "some updated name"
+    end
+
+    test "update_note/2 with invalid data returns error changeset" do
+      note = note_fixture()
+      assert {:error, %Ecto.Changeset{}} = Lecture.update_note(note, @invalid_attrs)
+      assert note == Lecture.get_note!(note.id)
+    end
+
+    test "delete_note/1 deletes the note" do
+      note = note_fixture()
+      assert {:ok, %Note{}} = Lecture.delete_note(note)
+      assert_raise Ecto.NoResultsError, fn -> Lecture.get_note!(note.id) end
+    end
+
+    test "change_note/1 returns a note changeset" do
+      note = note_fixture()
+      assert %Ecto.Changeset{} = Lecture.change_note(note)
+    end
+  end
 end
