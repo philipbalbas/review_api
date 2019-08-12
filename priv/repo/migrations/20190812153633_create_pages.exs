@@ -7,7 +7,7 @@ defmodule ReviewApi.Repo.Migrations.CreatePages do
       add :description, :string
       add :completed, :boolean, default: false, null: false
       add :content, :text
-      add :topic_id, references(:topic, on_delete: :nothing)
+      add :topic_id, references(:topics, on_delete: :nothing)
 
       timestamps()
     end
