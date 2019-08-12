@@ -1,7 +1,7 @@
 defmodule ReviewApi.Accounts.Organization do
   use Ecto.Schema
   import Ecto.Changeset
-    alias ReviewApi.Accounts.User
+  alias ReviewApi.Accounts.User
 
   schema "organizations" do
     field :city, :string

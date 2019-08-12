@@ -10,7 +10,7 @@ defmodule ReviewApi.Repo.Migrations.CreateUsers do
       add :email, :string
       add :password_hash, :string
       add :role, :string
-      add :organization_id, references(:organization), null: false
+      add :organization_id, references(:organizations), null: false
 
       timestamps()
     end
