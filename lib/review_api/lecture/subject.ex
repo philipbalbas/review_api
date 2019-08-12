@@ -7,6 +7,7 @@ defmodule ReviewApi.Lecture.Subject do
     field :completed, :boolean, default: false
     field :description, :string
     field :name, :string
+
     belongs_to(:module, Module)
 
     timestamps()
