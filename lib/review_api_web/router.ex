@@ -5,7 +5,11 @@ defmodule ReviewApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", ReviewApiWeb do
+  scope "/" do
     pipe_through :api
+
+    forward("/api", Absinthe.Plug, schema: ReviewApiWeb.Schema)
+
+    forward("/graphiql", Absinthe.Plug.GraphiQL, schema: ReviewApiWeb.Schema)
   end
 end
