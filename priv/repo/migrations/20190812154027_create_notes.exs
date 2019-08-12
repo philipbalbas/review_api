@@ -7,7 +7,7 @@ defmodule ReviewApi.Repo.Migrations.CreateNotes do
       add :description, :string
       add :completed, :boolean, default: false, null: false
       add :content, :text
-      add :page_id, references(:page, on_delete: :nothing)
+      add :page_id, references(:pages, on_delete: :nothing)
 
       timestamps()
     end
