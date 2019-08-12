@@ -193,4 +193,69 @@ defmodule ReviewApi.LectureTest do
       assert %Ecto.Changeset{} = Lecture.change_topic(topic)
     end
   end
+
+  describe "pages" do
+    alias ReviewApi.Lecture.Page
+
+    @valid_attrs %{completed: true, content: "some content", description: "some description", name: "some name"}
+    @update_attrs %{completed: false, content: "some updated content", description: "some updated description", name: "some updated name"}
+    @invalid_attrs %{completed: nil, content: nil, description: nil, name: nil}
+
+    def page_fixture(attrs \\ %{}) do
+      {:ok, page} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Lecture.create_page()
+
+      page
+    end
+
+    test "list_pages/0 returns all pages" do
+      page = page_fixture()
+      assert Lecture.list_pages() == [page]
+    end
+
+    test "get_page!/1 returns the page with given id" do
+      page = page_fixture()
+      assert Lecture.get_page!(page.id) == page
+    end
+
+    test "create_page/1 with valid data creates a page" do
+      assert {:ok, %Page{} = page} = Lecture.create_page(@valid_attrs)
+      assert page.completed == true
+      assert page.content == "some content"
+      assert page.description == "some description"
+      assert page.name == "some name"
+    end
+
+    test "create_page/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Lecture.create_page(@invalid_attrs)
+    end
+
+    test "update_page/2 with valid data updates the page" do
+      page = page_fixture()
+      assert {:ok, %Page{} = page} = Lecture.update_page(page, @update_attrs)
+      assert page.completed == false
+      assert page.content == "some updated content"
+      assert page.description == "some updated description"
+      assert page.name == "some updated name"
+    end
+
+    test "update_page/2 with invalid data returns error changeset" do
+      page = page_fixture()
+      assert {:error, %Ecto.Changeset{}} = Lecture.update_page(page, @invalid_attrs)
+      assert page == Lecture.get_page!(page.id)
+    end
+
+    test "delete_page/1 deletes the page" do
+      page = page_fixture()
+      assert {:ok, %Page{}} = Lecture.delete_page(page)
+      assert_raise Ecto.NoResultsError, fn -> Lecture.get_page!(page.id) end
+    end
+
+    test "change_page/1 returns a page changeset" do
+      page = page_fixture()
+      assert %Ecto.Changeset{} = Lecture.change_page(page)
+    end
+  end
 end
