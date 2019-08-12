@@ -10,10 +10,12 @@ defmodule ReviewApi.Repo.Migrations.CreateUsers do
       add :email, :string
       add :password_hash, :string
       add :role, :string
+      add :organization_id, references(:organization), null: false
 
       timestamps()
     end
 
     create unique_index(:users, [:email])
+    create index(:users, [:organization_id])
   end
 end
