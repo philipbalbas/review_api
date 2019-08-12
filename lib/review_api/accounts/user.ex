@@ -39,5 +39,6 @@ defmodule ReviewApi.Accounts.User do
       :role
     ])
     |> unique_constraint(:email)
+    |> unique_constraint(:username)
   end
 end
