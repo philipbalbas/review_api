@@ -7,7 +7,7 @@ defmodule ReviewApi.Repo.Migrations.CreateTopics do
       add :description, :string
       add :completed, :boolean, default: false, null: false
       add :content, :text
-      add :subject_id, references(:subject, on_delete: :nothing)
+      add :subject_id, references(:subjects, on_delete: :nothing)
 
       timestamps()
     end
