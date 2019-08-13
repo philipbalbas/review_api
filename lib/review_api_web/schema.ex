@@ -38,5 +38,11 @@ defmodule ReviewApiWeb.Schema do
       arg(:role, non_null(:string))
       resolve(&Resolvers.Organization.create_organization/3)
     end
+
+    @desc "Signup a user"
+    field :signup, :user do
+      arg(:input, non_null(:user_input))
+      resolve(&Resolvers.User.signup/3)
+    end
   end
 end

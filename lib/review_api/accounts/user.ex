@@ -21,24 +21,25 @@ defmodule ReviewApi.Accounts.User do
 
   @doc false
   def changeset(user, attrs) do
-    user
-    |> cast(attrs, [
+    required_fields = [
+      :email,
+      :password,
+      :password_confirmation,
+      :organization_id
+    ]
+
+    optional_fields = [
       :first_name,
       :last_name,
       :username,
       :exam_batch,
-      :email,
-      :password,
-      :password_confirmation,
       :role
-    ])
-    |> validate_required([
-      :first_name,
-      :last_name,
-      :email,
-      :password,
-      :password_confirmation
-    ])
+    ]
+
+    user
+    |> cast(attrs, required_fields ++ optional_fields)
+    |> validate_required(required_fields)
+    |> assoc_constraint(:organization)
     |> validate_format(:email, ~r/@/)
     |> update_change(:email, &String.downcase(&1))
     |> validate_length(:password, min: 6, max: 100)
