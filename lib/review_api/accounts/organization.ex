@@ -9,7 +9,7 @@ defmodule ReviewApi.Accounts.Organization do
     field :name, :string
     field :phone, :string
     field :street, :string
-    field :type, :string
+    field :role, :string
 
     has_many(:users, User)
 
@@ -19,8 +19,8 @@ defmodule ReviewApi.Accounts.Organization do
   @doc false
   def changeset(organization, attrs) do
     organization
-    |> cast(attrs, [:name, :street, :city, :email, :phone, :type])
-    |> validate_required([:name, :street, :city, :email, :phone, :type])
+    |> cast(attrs, [:name, :street, :city, :email, :phone, :role])
+    |> validate_required([:name])
     |> unique_constraint(:name)
   end
 end

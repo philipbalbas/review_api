@@ -1,9 +1,12 @@
 defmodule ReviewApiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :review_api
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", ReviewApiWeb.UserSocket,
     websocket: true,
     longpoll: false
+
+  plug CORSPlug
 
   # Serve at "/" the static files from "priv/static" directory.
   #

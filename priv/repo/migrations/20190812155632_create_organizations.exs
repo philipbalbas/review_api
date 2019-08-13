@@ -8,7 +8,7 @@ defmodule ReviewApi.Repo.Migrations.CreateOrganizations do
       add :city, :string
       add :email, :string
       add :phone, :string
-      add :type, :string
+      add :role, :string
 
       timestamps()
     end

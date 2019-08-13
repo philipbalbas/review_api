@@ -44,7 +44,8 @@ defmodule ReviewApi.MixProject do
       {:absinthe, "~> 1.4.16"},
       {:absinthe_plug, "~> 1.4.7"},
       {:absinthe_phoenix, "~> 1.4.4"},
-      {:dataloader, "~> 1.0.6"}
+      {:dataloader, "~> 1.0.6"},
+      {:cors_plug, "~> 2.0"}
     ]
   end
 
