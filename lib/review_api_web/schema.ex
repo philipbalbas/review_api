@@ -14,6 +14,17 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
       resolve(&Resolvers.Organization.organization/3)
     end
+
+    @desc "Get a list of users"
+    field :users, list_of(:user) do
+      resolve(&Resolvers.User.users/3)
+    end
+
+    @desc "Get a user"
+    field :user, :user do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.User.user/3)
+    end
   end
 
   mutation do
