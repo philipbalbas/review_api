@@ -5,4 +5,5 @@ defmodule ReviewApiWeb.Schema.Types do
 
   import_types(Types.OrganizationType)
   import_types(Types.UserType)
+  import_types(Types.LectureType)
 end

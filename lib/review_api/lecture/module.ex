@@ -3,7 +3,6 @@ defmodule ReviewApi.Lecture.Module do
   import Ecto.Changeset
 
   schema "modules" do
-    field :completed, :boolean, default: false
     field :description, :string
     field :name, :string
 
@@ -13,7 +12,7 @@ defmodule ReviewApi.Lecture.Module do
   @doc false
   def changeset(module, attrs) do
     module
-    |> cast(attrs, [:name, :description, :completed])
-    |> validate_required([:name, :description, :completed])
+    |> cast(attrs, [:name, :description])
+    |> validate_required([:name])
   end
 end

@@ -25,6 +25,17 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
       resolve(&Resolvers.User.user/3)
     end
+
+    @desc "Get a list of modules"
+    field :modules, list_of(:module) do
+      resolve(&Resolvers.Lecture.modules/3)
+    end
+
+    @desc "Get a list of modules"
+    field :module, :module do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Lecture.module/3)
+    end
   end
 
   mutation do
@@ -43,6 +54,12 @@ defmodule ReviewApiWeb.Schema do
     field :signup, :user do
       arg(:input, non_null(:user_input))
       resolve(&Resolvers.User.signup/3)
+    end
+
+    @desc "Create a module"
+    field :create_module, :module do
+      arg(:input, non_null(:module_input))
+      resolve(&Resolvers.Lecture.create_module/3)
     end
   end
 end
