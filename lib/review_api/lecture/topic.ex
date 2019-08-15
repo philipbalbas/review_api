@@ -4,7 +4,6 @@ defmodule ReviewApi.Lecture.Topic do
   alias ReviewApi.Lecture.Subject
 
   schema "topics" do
-    field :completed, :boolean, default: false
     field :content, :string
     field :description, :string
     field :name, :string
@@ -17,7 +16,9 @@ defmodule ReviewApi.Lecture.Topic do
   @doc false
   def changeset(topic, attrs) do
     topic
-    |> cast(attrs, [:name, :description, :completed, :content])
-    |> validate_required([:name, :description, :completed, :content])
+    |> cast(attrs, [:name, :description, :content, :subject_id])
+    |> unique_constraint(:name)
+    |> validate_required([:name, :subject_id])
+    |> assoc_constraint(:subject)
   end
 end

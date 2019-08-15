@@ -47,6 +47,17 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
       resolve(&Resolvers.Lecture.subject/3)
     end
+
+    @desc "Get a list topics"
+    field :topics, list_of(:topic) do
+      resolve(&Resolvers.Lecture.topics/3)
+    end
+
+    @desc "Get a single topic"
+    field :topic, :topic do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Lecture.topic/3)
+    end
   end
 
   mutation do
@@ -77,6 +88,12 @@ defmodule ReviewApiWeb.Schema do
     field :create_subject, :subject do
       arg(:input, non_null(:subject_input))
       resolve(&Resolvers.Lecture.create_subject/3)
+    end
+
+    @desc "Create a topic"
+    field :create_topic, :topic do
+      arg(:input, non_null(:topic_input))
+      resolve(&Resolvers.Lecture.create_topic/3)
     end
   end
 end
