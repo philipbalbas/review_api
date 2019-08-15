@@ -4,7 +4,6 @@ defmodule ReviewApi.Lecture.Subject do
   alias ReviewApi.Lecture.Module
 
   schema "subjects" do
-    field :completed, :boolean, default: false
     field :description, :string
     field :name, :string
 
@@ -16,7 +15,9 @@ defmodule ReviewApi.Lecture.Subject do
   @doc false
   def changeset(subject, attrs) do
     subject
-    |> cast(attrs, [:name, :description, :completed])
-    |> validate_required([:name, :description, :completed])
+    |> cast(attrs, [:name, :description, :module_id])
+    |> unique_constraint(:name)
+    |> validate_required([:name, :module_id])
+    |> assoc_constraint(:module)
   end
 end

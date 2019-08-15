@@ -31,10 +31,21 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Lecture.modules/3)
     end
 
-    @desc "Get a list of modules"
+    @desc "Get a single module"
     field :module, :module do
       arg(:id, non_null(:id))
       resolve(&Resolvers.Lecture.module/3)
+    end
+
+    @desc "Get a list subjects"
+    field :subjects, list_of(:subject) do
+      resolve(&Resolvers.Lecture.subjects/3)
+    end
+
+    @desc "Get a single subject"
+    field :subject, :subject do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Lecture.subject/3)
     end
   end
 
@@ -60,6 +71,12 @@ defmodule ReviewApiWeb.Schema do
     field :create_module, :module do
       arg(:input, non_null(:module_input))
       resolve(&Resolvers.Lecture.create_module/3)
+    end
+
+    @desc "Create a subject"
+    field :create_subject, :subject do
+      arg(:input, non_null(:subject_input))
+      resolve(&Resolvers.Lecture.create_subject/3)
     end
   end
 end
