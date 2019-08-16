@@ -124,6 +124,12 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Lecture.create_page/3)
     end
 
+    @desc "Update a page"
+    field :update_page, :page do
+      arg(:input, non_null(:update_page_input))
+      resolve(&Resolvers.Lecture.update_page/3)
+    end
+
     @desc "Create a note"
     field :create_note, :note do
       arg(:input, non_null(:note_input))

@@ -94,6 +94,21 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
+  def update_page(_, %{input: input}, _) do
+    page = Lecture.get_page!(input[:id])
+
+    case Lecture.update_page(page, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update page", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, page} ->
+        {:ok, page}
+    end
+  end
+
   def create_note(_, %{input: input}, _) do
     case Lecture.create_note(input) do
       {:error, changeset} ->
