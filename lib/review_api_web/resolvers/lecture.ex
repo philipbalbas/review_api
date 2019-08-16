@@ -106,4 +106,19 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         {:ok, note}
     end
   end
+
+  def update_note(_, %{input: input}, _) do
+    note = Lecture.get_note!(input[:id])
+
+    case Lecture.update_note(note, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not edit note", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, note} ->
+        {:ok, note}
+    end
+  end
 end

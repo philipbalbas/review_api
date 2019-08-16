@@ -65,4 +65,11 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:content, :string)
     field(:page_id, non_null(:id))
   end
+
+  input_object :update_note_input do
+    field(:id, non_null(:id))
+    field(:name, :string)
+    field(:content, :string)
+    field(:page_id, :id)
+  end
 end
