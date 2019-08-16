@@ -34,6 +34,14 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_page!(id)}
   end
 
+  def notes(_, _, _) do
+    {:ok, Lecture.list_notes()}
+  end
+
+  def note(_, %{id: id}, _) do
+    {:ok, Lecture.get_note!(id)}
+  end
+
   def create_module(_, %{input: input}, _) do
     case Lecture.create_module(input) do
       {:error, changeset} ->
@@ -83,6 +91,19 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
 
       {:ok, page} ->
         {:ok, page}
+    end
+  end
+
+  def create_note(_, %{input: input}, _) do
+    case Lecture.create_note(input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create note", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, note} ->
+        {:ok, note}
     end
   end
 end

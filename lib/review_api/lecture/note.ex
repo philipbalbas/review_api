@@ -4,7 +4,6 @@ defmodule ReviewApi.Lecture.Note do
   alias ReviewApi.Lecture.Page
 
   schema "notes" do
-    field :completed, :boolean, default: false
     field :content, :string
     field :description, :string
     field :name, :string
@@ -17,7 +16,9 @@ defmodule ReviewApi.Lecture.Note do
   @doc false
   def changeset(note, attrs) do
     note
-    |> cast(attrs, [:name, :description, :completed, :content])
-    |> validate_required([:name, :description, :completed, :content])
+    |> cast(attrs, [:name, :description, :content, :page_id])
+    |> unique_constraint(:name)
+    |> validate_required([:name, :page_id])
+    |> assoc_constraint(:page)
   end
 end
