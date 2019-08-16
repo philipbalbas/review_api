@@ -58,6 +58,17 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
       resolve(&Resolvers.Lecture.topic/3)
     end
+
+    @desc "Get a list of pages"
+    field :pages, list_of(:page) do
+      resolve(&Resolvers.Lecture.pages/3)
+    end
+
+    @desc "Get a single page"
+    field :page, :page do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Lecture.page/3)
+    end
   end
 
   mutation do
@@ -94,6 +105,12 @@ defmodule ReviewApiWeb.Schema do
     field :create_topic, :topic do
       arg(:input, non_null(:topic_input))
       resolve(&Resolvers.Lecture.create_topic/3)
+    end
+
+    @desc "Create a topic"
+    field :create_page, :page do
+      arg(:input, non_null(:page_input))
+      resolve(&Resolvers.Lecture.create_page/3)
     end
   end
 end

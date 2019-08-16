@@ -26,6 +26,14 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_topic!(id)}
   end
 
+  def pages(_, _, _) do
+    {:ok, Lecture.list_pages()}
+  end
+
+  def page(_, %{id: id}, _) do
+    {:ok, Lecture.get_page!(id)}
+  end
+
   def create_module(_, %{input: input}, _) do
     case Lecture.create_module(input) do
       {:error, changeset} ->
@@ -62,6 +70,19 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
 
       {:ok, topic} ->
         {:ok, topic}
+    end
+  end
+
+  def create_page(_, %{input: input}, _) do
+    case Lecture.create_page(input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create page", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, page} ->
+        {:ok, page}
     end
   end
 end
