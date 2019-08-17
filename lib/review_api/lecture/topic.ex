@@ -9,6 +9,7 @@ defmodule ReviewApi.Lecture.Topic do
     field :name, :string
 
     belongs_to(:subject, Subject)
+    has_many(:pages, ReviewApi.Lecture.Page)
 
     timestamps()
   end

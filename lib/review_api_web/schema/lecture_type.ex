@@ -22,6 +22,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
+    field :pages, list_of(:page), resolve: dataloader(Lecture)
   end
 
   object :page do
