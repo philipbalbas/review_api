@@ -14,6 +14,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:id, :id)
     field(:name, :string)
     field(:description, :string)
+    field :topics, list_of(:topic), resolve: dataloader(Lecture)
   end
 
   object :topic do

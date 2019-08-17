@@ -8,6 +8,7 @@ defmodule ReviewApi.Lecture.Subject do
     field :name, :string
 
     belongs_to(:module, Module)
+    has_many(:topics, ReviewApi.Lecture.Topic)
 
     timestamps()
   end
