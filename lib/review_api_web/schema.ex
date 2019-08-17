@@ -3,6 +3,8 @@ defmodule ReviewApiWeb.Schema do
   alias ReviewApiWeb.Resolvers
   import_types(ReviewApiWeb.Schema.Types)
 
+  alias ReviewApi.{Accounts, Lecture}
+
   query do
     @desc "Get a list of organizations"
     field :organizations, list_of(:organization) do
@@ -141,5 +143,18 @@ defmodule ReviewApiWeb.Schema do
       arg(:input, non_null(:update_note_input))
       resolve(&Resolvers.Lecture.update_note/3)
     end
+  end
+
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(Accounts, Accounts.datasource())
+      |> Dataloader.add_source(Lecture, Lecture.datasource())
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 end

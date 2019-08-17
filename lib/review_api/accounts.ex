@@ -197,4 +197,12 @@ defmodule ReviewApi.Accounts do
   def change_organization(%Organization{} = organization) do
     Organization.changeset(organization, %{})
   end
+
+  def datasource() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(queryable, _) do
+    queryable
+  end
 end

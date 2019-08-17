@@ -485,4 +485,12 @@ defmodule ReviewApi.Lecture do
   def change_note(%Note{} = note) do
     Note.changeset(note, %{})
   end
+
+  def datasource() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(queryable, _) do
+    queryable
+  end
 end
