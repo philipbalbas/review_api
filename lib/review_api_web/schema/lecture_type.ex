@@ -1,10 +1,13 @@
 defmodule ReviewApiWeb.Schema.Types.LectureType do
   use Absinthe.Schema.Notation
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
+  alias ReviewApi.Lecture
 
   object :module do
     field(:id, :id)
     field(:name, :string)
     field(:description, :string)
+    field :subjects, list_of(:subject), resolve: dataloader(Lecture)
   end
 
   object :subject do

@@ -6,6 +6,8 @@ defmodule ReviewApi.Lecture.Module do
     field :description, :string
     field :name, :string
 
+    has_many(:subjects, ReviewApi.Lecture.Subject)
+
     timestamps()
   end
 
