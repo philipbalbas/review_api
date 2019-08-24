@@ -37,6 +37,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:id, :id)
     field(:name, :string)
     field(:content, :string)
+    field(:page_id, :id)
     field(:description, :string)
   end
 

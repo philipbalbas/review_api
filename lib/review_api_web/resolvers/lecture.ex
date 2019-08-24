@@ -2,40 +2,40 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
   alias ReviewApi.Lecture
   alias ReviewApiWeb.Schema.ChangesetErrors
 
-  def modules(_, _, _) do
-    {:ok, Lecture.list_modules()}
+  def modules(_, args, _) do
+    {:ok, Lecture.list_modules(args)}
   end
 
   def module(_, %{id: id}, _) do
     {:ok, Lecture.get_module!(id)}
   end
 
-  def subjects(_, _, _) do
-    {:ok, Lecture.list_subjects()}
+  def subjects(_, args, _) do
+    {:ok, Lecture.list_subjects(args)}
   end
 
   def subject(_, %{id: id}, _) do
     {:ok, Lecture.get_subject!(id)}
   end
 
-  def topics(_, _, _) do
-    {:ok, Lecture.list_topics()}
+  def topics(_, args, _) do
+    {:ok, Lecture.list_topics(args)}
   end
 
   def topic(_, %{id: id}, _) do
     {:ok, Lecture.get_topic!(id)}
   end
 
-  def pages(_, _, _) do
-    {:ok, Lecture.list_pages()}
+  def pages(_, args, _) do
+    {:ok, Lecture.list_pages(args)}
   end
 
   def page(_, %{id: id}, _) do
     {:ok, Lecture.get_page!(id)}
   end
 
-  def notes(_, _, _) do
-    {:ok, Lecture.list_notes()}
+  def notes(_, args, _) do
+    {:ok, Lecture.list_notes(args)}
   end
 
   def note(_, %{id: id}, _) do

@@ -5,8 +5,7 @@ defmodule ReviewApi.Lecture do
 
   import Ecto.Query, warn: false
   alias ReviewApi.Repo
-
-  alias ReviewApi.Lecture.Module
+  alias ReviewApi.Lecture.{Module, Subject, Topic, Page, Note}
 
   @doc """
   Returns the list of modules.
@@ -19,6 +18,16 @@ defmodule ReviewApi.Lecture do
   """
   def list_modules do
     Repo.all(Module)
+  end
+
+  def list_modules(criteria) do
+    query = from(p in Module)
+
+    Enum.reduce(criteria, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :id}])
+    end)
+    |> Repo.all()
   end
 
   @doc """
@@ -117,6 +126,16 @@ defmodule ReviewApi.Lecture do
     Repo.all(Subject)
   end
 
+  def list_subjects(criteria) do
+    query = from(p in Subject)
+
+    Enum.reduce(criteria, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :id}])
+    end)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single subject.
 
@@ -211,6 +230,16 @@ defmodule ReviewApi.Lecture do
   """
   def list_topics do
     Repo.all(Topic)
+  end
+
+  def list_topics(criteria) do
+    query = from(p in Topic)
+
+    Enum.reduce(criteria, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :id}])
+    end)
+    |> Repo.all()
   end
 
   @doc """
@@ -309,6 +338,16 @@ defmodule ReviewApi.Lecture do
     Repo.all(Page)
   end
 
+  def list_pages(criteria) do
+    query = from(p in Page)
+
+    Enum.reduce(criteria, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :id}])
+    end)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single page.
 
@@ -403,6 +442,16 @@ defmodule ReviewApi.Lecture do
   """
   def list_notes do
     Repo.all(Note)
+  end
+
+  def list_notes(criteria) do
+    query = from(p in Note)
+
+    Enum.reduce(criteria, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :id}])
+    end)
+    |> Repo.all()
   end
 
   @doc """

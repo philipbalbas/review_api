@@ -30,6 +30,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list of modules"
     field :modules, list_of(:module) do
+      arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Lecture.modules/3)
     end
 
@@ -41,6 +42,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list subjects"
     field :subjects, list_of(:subject) do
+      arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Lecture.subjects/3)
     end
 
@@ -52,6 +54,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list topics"
     field :topics, list_of(:topic) do
+      arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Lecture.topics/3)
     end
 
@@ -63,6 +66,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list of pages"
     field :pages, list_of(:page) do
+      arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Lecture.pages/3)
     end
 
@@ -74,6 +78,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list of notes"
     field :notes, list_of(:note) do
+      arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Lecture.notes/3)
     end
 
@@ -143,6 +148,11 @@ defmodule ReviewApiWeb.Schema do
       arg(:input, non_null(:update_note_input))
       resolve(&Resolvers.Lecture.update_note/3)
     end
+  end
+
+  enum :sort_order do
+    value(:asc)
+    value(:desc)
   end
 
   def context(ctx) do
