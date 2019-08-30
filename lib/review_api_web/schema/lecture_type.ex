@@ -1,20 +1,26 @@
 defmodule ReviewApiWeb.Schema.Types.LectureType do
   use Absinthe.Schema.Notation
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
+  import Absinthe.Resolution.Helpers, only: [dataloader: 3]
   alias ReviewApi.Lecture
 
   object :module do
     field(:id, :id)
     field(:name, :string)
     field(:description, :string)
-    field :subjects, list_of(:subject), resolve: dataloader(Lecture)
+
+    field :subjects, list_of(:subject) do
+      resolve(dataloader(Lecture, :subjects, args: %{scope: :module}))
+    end
   end
 
   object :subject do
     field(:id, :id)
     field(:name, :string)
     field(:description, :string)
-    field :topics, list_of(:topic), resolve: dataloader(Lecture)
+
+    field :topics, list_of(:topic) do
+      resolve(dataloader(Lecture, :topics, args: %{scope: :subject}))
+    end
   end
 
   object :topic do
@@ -22,7 +28,10 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
-    field :pages, list_of(:page), resolve: dataloader(Lecture)
+
+    field :pages, list_of(:page) do
+      resolve(dataloader(Lecture, :pages, args: %{scope: :topic}))
+    end
   end
 
   object :page do
@@ -30,7 +39,10 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
-    field :notes, list_of(:note), resolve: dataloader(Lecture)
+
+    field :notes, list_of(:note) do
+      resolve(dataloader(Lecture, :notes, args: %{scope: :page}))
+    end
   end
 
   object :note do

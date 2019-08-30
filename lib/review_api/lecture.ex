@@ -539,6 +539,26 @@ defmodule ReviewApi.Lecture do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
+  def query(Subject, %{scope: :module}) do
+    Subject
+    |> order_by(asc: :id)
+  end
+
+  def query(Topic, %{scope: :subject}) do
+    Topic
+    |> order_by(asc: :id)
+  end
+
+  def query(Page, %{scope: :topic}) do
+    Page
+    |> order_by(asc: :id)
+  end
+
+  def query(Note, %{scope: :page}) do
+    Note
+    |> order_by(asc: :id)
+  end
+
   def query(queryable, _) do
     queryable
   end
