@@ -17,6 +17,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:id, :id)
     field(:name, :string)
     field(:description, :string)
+    field(:module_id, :id)
 
     field :topics, list_of(:topic) do
       resolve(dataloader(Lecture, :topics, args: %{scope: :subject}))
@@ -28,6 +29,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
+    field(:subject_id, :id)
 
     field :pages, list_of(:page) do
       resolve(dataloader(Lecture, :pages, args: %{scope: :topic}))
@@ -39,6 +41,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
+    field(:topic_id, :id)
 
     field :notes, list_of(:note) do
       resolve(dataloader(Lecture, :notes, args: %{scope: :page}))
