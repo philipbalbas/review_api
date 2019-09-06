@@ -8,5 +8,7 @@ defmodule ReviewApi.Repo.Migrations.CreateModules do
 
       timestamps()
     end
+
+    create unique_index(:modules, [:name])
   end
 end

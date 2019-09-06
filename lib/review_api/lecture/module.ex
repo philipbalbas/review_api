@@ -16,5 +16,6 @@ defmodule ReviewApi.Lecture.Module do
     module
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
+    |> unique_constraint(:name)
   end
 end
