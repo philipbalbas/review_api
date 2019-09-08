@@ -131,6 +131,24 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Lecture.create_page/3)
     end
 
+    @desc "Update a module"
+    field :update_module, :module do
+      arg(:input, non_null(:update_module_input))
+      resolve(&Resolvers.Lecture.update_module/3)
+    end
+
+    @desc "Update a subject"
+    field :update_subject, :subject do
+      arg(:input, non_null(:update_subject_input))
+      resolve(&Resolvers.Lecture.update_subject/3)
+    end
+
+    @desc "Update a topic"
+    field :update_topic, :topic do
+      arg(:input, non_null(:update_topic_input))
+      resolve(&Resolvers.Lecture.update_topic/3)
+    end
+
     @desc "Update a page"
     field :update_page, :page do
       arg(:input, non_null(:update_page_input))

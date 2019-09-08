@@ -5,6 +5,7 @@ defmodule ReviewApi.Lecture.Module do
   schema "modules" do
     field :description, :string
     field :name, :string
+    # field :slug, :string
 
     has_many(:subjects, ReviewApi.Lecture.Subject)
 

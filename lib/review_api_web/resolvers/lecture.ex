@@ -94,6 +94,51 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
+  def update_module(_, %{input: input}, _) do
+    module = Lecture.get_module!(input[:id])
+
+    case Lecture.update_module(module, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update module", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, module} ->
+        {:ok, module}
+    end
+  end
+
+  def update_subject(_, %{input: input}, _) do
+    subject = Lecture.get_subject!(input[:id])
+
+    case Lecture.update_subject(subject, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update subject", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, subject} ->
+        {:ok, subject}
+    end
+  end
+
+  def update_topic(_, %{input: input}, _) do
+    topic = Lecture.get_topic!(input[:id])
+
+    case Lecture.update_topic(topic, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update topic", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, topic} ->
+        {:ok, topic}
+    end
+  end
+
   def update_page(_, %{input: input}, _) do
     page = Lecture.get_page!(input[:id])
 

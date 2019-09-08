@@ -88,9 +88,30 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:page_id, non_null(:id))
   end
 
+  input_object :update_module_input do
+    field(:id, non_null(:id))
+    field(:name, non_null(:string))
+    field(:description, :string)
+  end
+
+  input_object :update_subject_input do
+    field(:id, non_null(:id))
+    field(:module_id, :id)
+    field(:name, non_null(:string))
+    field(:description, :string)
+  end
+
+  input_object :update_topic_input do
+    field(:id, non_null(:id))
+    field(:subject_id, :id)
+    field(:name, non_null(:string))
+    field(:description, :string)
+  end
+
   input_object :update_page_input do
     field(:id, non_null(:id))
-    field(:name, :string)
+    field(:name, non_null(:string))
+    field(:description, :string)
     field(:content, :string)
     field(:topic_id, :id)
   end
