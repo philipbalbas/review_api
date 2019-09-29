@@ -101,6 +101,13 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Organization.create_organization/3)
     end
 
+    @desc "Signin a user"
+    field :signin, :session do
+      arg(:email, :string)
+      arg(:password, :string)
+      resolve(&Resolvers.User.signin/3)
+    end
+
     @desc "Signup a user"
     field :signup, :user do
       arg(:input, non_null(:user_input))

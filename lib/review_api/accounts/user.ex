@@ -8,13 +8,12 @@ defmodule ReviewApi.Accounts.User do
     field :exam_batch, :string
     field :first_name, :string
     field :last_name, :string
-    field(:role, :string, default: "student")
+    field :role, :string, default: "student"
     field :username, :string
     field :password_hash, :string
-    field(:password, :string, virtual: true)
-    field(:password_confirmation, :string, virtual: true)
+    field :password, :string, virtual: true
 
-    belongs_to(:organization, Organization)
+    belongs_to :organization, Organization
 
     timestamps()
   end
@@ -22,16 +21,15 @@ defmodule ReviewApi.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     required_fields = [
+      :username,
       :email,
       :password,
-      :password_confirmation,
       :organization_id
     ]
 
     optional_fields = [
       :first_name,
       :last_name,
-      :username,
       :exam_batch,
       :role
     ]
@@ -42,17 +40,19 @@ defmodule ReviewApi.Accounts.User do
     |> assoc_constraint(:organization)
     |> validate_format(:email, ~r/@/)
     |> update_change(:email, &String.downcase(&1))
+    |> validate_length(:username, min: 2, max: 100)
     |> validate_length(:password, min: 6, max: 100)
-    |> validate_confirmation(:password)
     |> unique_constraint(:email)
     |> hash_password
   end
 
-  defp hash_password(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
-    change(changeset, Argon2.add_hash(password))
-  end
-
   defp hash_password(changeset) do
-    changeset
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
+        put_change(changeset, :password_hash, Pbkdf2.hash_pwd_salt(password))
+
+      _ ->
+        changeset
+    end
   end
 end
