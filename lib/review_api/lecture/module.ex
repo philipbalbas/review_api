@@ -1,13 +1,15 @@
 defmodule ReviewApi.Lecture.Module do
   use Ecto.Schema
   import Ecto.Changeset
+  alias ReviewApi.Lecture.{Category, Subject}
 
   schema "modules" do
     field :description, :string
     field :name, :string
     # field :slug, :string
 
-    has_many(:subjects, ReviewApi.Lecture.Subject)
+    belongs_to(:category, Category)
+    has_many(:subjects, Subject)
 
     timestamps()
   end
@@ -15,8 +17,9 @@ defmodule ReviewApi.Lecture.Module do
   @doc false
   def changeset(module, attrs) do
     module
-    |> cast(attrs, [:name, :description])
+    |> cast(attrs, [:name, :description, :category_id])
     |> validate_required([:name])
     |> unique_constraint(:name)
+    |> assoc_constraint(:category)
   end
 end
