@@ -1,6 +1,6 @@
 defmodule ReviewApiWeb.Schema.Types.TestsType do
   use Absinthe.Schema.Notation
-  import Absinthe.Resolution.Helpers, only: [dataloader: 3]
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
   alias ReviewApi.Tests
 
   enum :exam_type do
@@ -29,9 +29,9 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :exam_id, :id
     field :topic_id, :id
 
-    field :choices, list_of(:choice) do
-      resolve(dataloader(Tests, :choices, args: %{scope: :card}))
-    end
+    field :choices, list_of(:choice), resolve: dataloader(Tests)
+
+    field :answers, list_of(:choice), resolve: dataloader(Tests)
   end
 
   object :choice do
@@ -75,6 +75,11 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   end
 
   input_object :upsert_card_choices_input do
+    field :card_id, non_null(:id)
+    field :choice_ids, non_null(list_of(:id))
+  end
+
+  input_object :upsert_question_answers do
     field :card_id, non_null(:id)
     field :choice_ids, non_null(list_of(:id))
   end

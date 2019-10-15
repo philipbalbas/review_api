@@ -6,6 +6,7 @@ defmodule ReviewApi.Tests.Choice do
   schema "choices" do
     field :content, :string
 
+    many_to_many :questions, Tests.Card, join_through: "questions_answers", on_replace: :delete
     many_to_many :cards, Tests.Card, join_through: "cards_choices", on_replace: :delete
 
     timestamps()

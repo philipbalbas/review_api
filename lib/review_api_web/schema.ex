@@ -232,6 +232,12 @@ defmodule ReviewApiWeb.Schema do
       arg(:input, non_null(:upsert_card_choices_input))
       resolve(&Resolvers.Tests.upsert_card_choices/3)
     end
+
+    @desc "Add answers to question"
+    field :upsert_question_answers, :card do
+      arg(:input, non_null(:upsert_question_answers))
+      resolve(&Resolvers.Tests.upsert_question_answers/3)
+    end
   end
 
   enum :sort_order do

@@ -100,6 +100,11 @@ defmodule ReviewApi.Tests do
     |> Card.upsert_card_choices(choice_ids)
   end
 
+  def upsert_question_answers(%Card{} = card, %{choice_ids: choice_ids}) do
+    card
+    |> Card.upsert_question_answers(choice_ids)
+  end
+
   @doc """
   Deletes a Card.
 
@@ -173,15 +178,9 @@ defmodule ReviewApi.Tests do
 
   """
   def create_choice(attrs \\ %{}) do
-    # card = Repo.get_by(Card, id: attrs.card_id)
-    # IO.inspect(card)
-
     %Choice{}
     |> Choice.changeset(attrs)
     |> Repo.insert()
-
-    # |> Repo.preload(:cards)
-    # |> Ecto.Changeset.put_assoc(:cards, [card])
   end
 
   @doc """

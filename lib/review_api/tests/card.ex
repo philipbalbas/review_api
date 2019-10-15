@@ -11,7 +11,7 @@ defmodule ReviewApi.Tests.Card do
     field :rationale, :string
     field :type, :string
 
-    # many_to_many(:answers, Tests.Choice)
+    many_to_many :answers, Tests.Choice, join_through: "questions_answers", on_replace: :delete
     many_to_many :choices, Tests.Choice, join_through: "cards_choices", on_replace: :delete
     many_to_many :exam, Tests.Exam, join_through: "exams_cards", on_replace: :delete
     belongs_to :topic, Lecture.Topic
@@ -44,6 +44,29 @@ defmodule ReviewApi.Tests.Card do
            |> changeset_update_choices(choices)
            |> Repo.update() do
       {:ok, Tests.get_card!(card.id)}
+    else
+      error -> error
+    end
+  end
+
+  def changeset_update_answers(question, answers) do
+    question
+    |> Repo.preload(:answers)
+    |> cast(%{}, [:id])
+    |> put_assoc(:answers, answers)
+  end
+
+  def upsert_question_answers(question, answer_ids) when is_list(answer_ids) do
+    answers =
+      Choice
+      |> where([answer], answer.id in ^answer_ids)
+      |> Repo.all()
+
+    with {:ok, _struct} <-
+           question
+           |> changeset_update_answers(answers)
+           |> Repo.update() do
+      {:ok, Tests.get_card!(question.id)}
     else
       error -> error
     end
