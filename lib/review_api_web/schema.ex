@@ -3,7 +3,7 @@ defmodule ReviewApiWeb.Schema do
   alias ReviewApiWeb.Resolvers
   import_types(ReviewApiWeb.Schema.Types)
 
-  alias ReviewApi.{Accounts, Lecture}
+  alias ReviewApi.{Accounts, Lecture, Tests}
 
   query do
     @desc "Get a list of organizations"
@@ -26,6 +26,11 @@ defmodule ReviewApiWeb.Schema do
     field :user, :user do
       arg(:id, non_null(:id))
       resolve(&Resolvers.User.user/3)
+    end
+
+    @desc "Get a list of categories"
+    field :list_categories, list_of(:category) do
+      resolve(&Resolvers.Lecture.list_categories/3)
     end
 
     @desc "Get a list of modules"
@@ -87,6 +92,18 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
       resolve(&Resolvers.Lecture.note/3)
     end
+
+    @desc "Get a list of exams"
+    field :list_exams, list_of(non_null(:exam)) do
+      arg(:filter, :exam_filter)
+      resolve(&Resolvers.Tests.list_exams/3)
+    end
+
+    @desc "Get a list of cards"
+    field :list_cards, list_of(non_null(:card)) do
+      arg(:filter, :card_filter)
+      resolve(&Resolvers.Tests.list_cards/3)
+    end
   end
 
   mutation do
@@ -112,6 +129,18 @@ defmodule ReviewApiWeb.Schema do
     field :signup, :user do
       arg(:input, non_null(:user_input))
       resolve(&Resolvers.User.signup/3)
+    end
+
+    @desc "Create a category"
+    field :create_category, :category do
+      arg(:input, non_null(:create_category_input))
+      resolve(&Resolvers.Lecture.create_category/3)
+    end
+
+    @desc "Update a category"
+    field :update_category, :category do
+      arg(:input, non_null(:update_category_input))
+      resolve(&Resolvers.Lecture.update_category/3)
     end
 
     @desc "Create a module"
@@ -173,6 +202,36 @@ defmodule ReviewApiWeb.Schema do
       arg(:input, non_null(:update_note_input))
       resolve(&Resolvers.Lecture.update_note/3)
     end
+
+    @desc "Create an exam"
+    field :create_exam, :exam do
+      arg(:input, non_null(:create_exam_input))
+      resolve(&Resolvers.Tests.create_exam/3)
+    end
+
+    @desc "Update an exam"
+    field :update_exam, :exam do
+      arg(:input, non_null(:update_exam_input))
+      resolve(&Resolvers.Tests.update_exam/3)
+    end
+
+    @desc "Create a card"
+    field :create_card, :card do
+      arg(:input, non_null(:create_card_input))
+      resolve(&Resolvers.Tests.create_card/3)
+    end
+
+    @desc "Create a choice"
+    field :create_choice, :choice do
+      arg(:input, non_null(:create_choice_input))
+      resolve(&Resolvers.Tests.create_choice/3)
+    end
+
+    @desc "Add choices to card"
+    field :upsert_card_choices, :card do
+      arg(:input, non_null(:upsert_card_choices_input))
+      resolve(&Resolvers.Tests.upsert_card_choices/3)
+    end
   end
 
   enum :sort_order do
@@ -185,6 +244,7 @@ defmodule ReviewApiWeb.Schema do
       Dataloader.new()
       |> Dataloader.add_source(Accounts, Accounts.datasource())
       |> Dataloader.add_source(Lecture, Lecture.datasource())
+      |> Dataloader.add_source(Tests, Tests.datasource())
 
     Map.put(ctx, :loader, loader)
   end

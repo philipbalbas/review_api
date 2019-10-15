@@ -2,6 +2,10 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
   alias ReviewApi.Lecture
   alias ReviewApiWeb.Schema.ChangesetErrors
 
+  def list_categories(_, _, _) do
+    {:ok, Lecture.list_categories()}
+  end
+
   def modules(_, args, _) do
     {:ok, Lecture.list_modules(args)}
   end
@@ -40,6 +44,32 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
 
   def note(_, %{id: id}, _) do
     {:ok, Lecture.get_note!(id)}
+  end
+
+  def create_category(_, %{input: input}, _) do
+    case Lecture.create_category(input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not create category", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, category} ->
+        {:ok, category}
+    end
+  end
+
+  def update_category(_, %{input: input}, _) do
+    category = Lecture.get_category!(input[:id])
+
+    case Lecture.update_category(category, input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update category", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, category} ->
+        {:ok, category}
+    end
   end
 
   def create_module(_, %{input: input}, _) do
