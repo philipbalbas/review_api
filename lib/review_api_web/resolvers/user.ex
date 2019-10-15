@@ -21,6 +21,11 @@ defmodule ReviewApiWeb.Resolvers.User do
     end
   end
 
+  @spec signup(
+          any,
+          %{input: :invalid | %{optional(:__struct__) => none, optional(atom | binary) => any}},
+          any
+        ) :: {:error, [{:details, map} | {:message, <<_::168>>}, ...]} | {:ok, any}
   def signup(_, %{input: input}, _) do
     case Accounts.create_user(input) do
       {:error, changeset} ->
