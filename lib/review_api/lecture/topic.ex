@@ -10,6 +10,7 @@ defmodule ReviewApi.Lecture.Topic do
 
     belongs_to(:subject, Subject)
     has_many(:pages, ReviewApi.Lecture.Page)
+    has_many(:cards, ReviewApi.Tests.Card)
 
     timestamps()
   end
