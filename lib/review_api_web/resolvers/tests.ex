@@ -68,4 +68,10 @@ defmodule ReviewApiWeb.Resolvers.Tests do
 
     ReviewApi.Tests.upsert_question_answers(question, input)
   end
+
+  def upsert_exam_cards(_, %{input: input}, _) do
+    exam = ReviewApi.Tests.get_exam!(input[:exam_id])
+
+    ReviewApi.Tests.upsert_exam_cards(exam, input)
+  end
 end

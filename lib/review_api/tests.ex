@@ -319,6 +319,11 @@ defmodule ReviewApi.Tests do
     |> Repo.update()
   end
 
+  def upsert_exam_cards(%Exam{} = exam, %{card_ids: card_ids}) do
+    exam
+    |> Exam.upsert_exam_cards(card_ids)
+  end
+
   @doc """
   Deletes a Exam.
 
@@ -350,6 +355,11 @@ defmodule ReviewApi.Tests do
 
   def datasource() do
     Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  def query(Card, %{scope: :exam}) do
+    Card
+    |> order_by(asc: :id)
   end
 
   def query(Card, %{scope: :topic}) do

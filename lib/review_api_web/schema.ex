@@ -235,8 +235,14 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Add answers to question"
     field :upsert_question_answers, :card do
-      arg(:input, non_null(:upsert_question_answers))
+      arg(:input, non_null(:upsert_question_answers_input))
       resolve(&Resolvers.Tests.upsert_question_answers/3)
+    end
+
+    @desc "Add cards to exam"
+    field :upsert_exam_cards, :exam do
+      arg(:input, non_null(:upsert_exam_cards_input))
+      resolve(&Resolvers.Tests.upsert_exam_cards/3)
     end
   end
 
