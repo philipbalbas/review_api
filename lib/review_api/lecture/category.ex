@@ -3,10 +3,11 @@ defmodule ReviewApi.Lecture.Category do
   import Ecto.Changeset
 
   schema "categories" do
-    field :description, :string
-    field :name, :string
+    field(:description, :string)
+    field(:name, :string)
 
-    has_many :modules, ReviewApi.Lecture.Module
+    has_many(:modules, ReviewApi.Lecture.Module)
+    has_many(:exams, ReviewApi.Tests.Exam)
 
     timestamps()
   end

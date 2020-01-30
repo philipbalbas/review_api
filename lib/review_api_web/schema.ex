@@ -29,7 +29,7 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of categories"
-    field :list_categories, list_of(:category) do
+    field :list_categories, list_of(non_null(:category)) do
       resolve(&Resolvers.Lecture.list_categories/3)
     end
 
@@ -97,6 +97,12 @@ defmodule ReviewApiWeb.Schema do
     field :list_exams, list_of(non_null(:exam)) do
       arg(:filter, :exam_filter)
       resolve(&Resolvers.Tests.list_exams/3)
+    end
+
+    @desc "Get a single exam"
+    field :get_exam, :exam do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Tests.get_exam/3)
     end
 
     @desc "Get a list of cards"

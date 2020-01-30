@@ -6,9 +6,12 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     {:ok, Tests.list_cards(args)}
   end
 
-  @spec list_exams(any, any, any) :: {:ok, any}
   def list_exams(_, args, _) do
     {:ok, Tests.list_exams(args)}
+  end
+
+  def get_exam(_, %{id: id}, _) do
+    {:ok, Tests.get_exam!(id)}
   end
 
   def create_exam(_, %{input: input}, _) do
