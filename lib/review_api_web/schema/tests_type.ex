@@ -37,6 +37,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   end
 
   object :choice do
+    field :id, non_null(:string)
     field :content, non_null(:string)
   end
 

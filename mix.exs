@@ -35,18 +35,19 @@ defmodule ReviewApi.MixProject do
     [
       {:phoenix, "~> 1.4.9"},
       {:phoenix_pubsub, "~> 1.1"},
-      {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.1"},
-      {:postgrex, ">= 0.0.0"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:absinthe, "~> 1.4.16"},
-      {:absinthe_plug, "~> 1.4.7"},
-      {:absinthe_phoenix, "~> 1.4.4"},
-      {:dataloader, "~> 1.0.6"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:ecto_sql, "~> 3.4"},
+      {:postgrex, "~> 0.15.4"},
+      {:gettext, "~> 0.18.0"},
+      {:jason, "~> 1.2"},
+      {:plug_cowboy, "~> 2.2"},
+      {:absinthe, "~> 1.4"},
+      {:absinthe_plug, "~> 1.4"},
+      {:absinthe_phoenix, "~> 1.4"},
+      {:absinthe_relay, "~> 1.4"},
+      {:dataloader, "~> 1.0"},
       {:cors_plug, "~> 2.0"},
-      {:pbkdf2_elixir, "~> 1.0"}
+      {:pbkdf2_elixir, "~> 1.2"}
     ]
   end
 
