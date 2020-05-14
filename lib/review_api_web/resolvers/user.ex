@@ -6,7 +6,7 @@ defmodule ReviewApiWeb.Resolvers.User do
     {:ok, Accounts.list_users()}
   end
 
-  def user(_, %{id: id}, _) do
+  def user(%{id: id}, _) do
     {:ok, Accounts.get_user!(id)}
   end
 
@@ -21,11 +21,6 @@ defmodule ReviewApiWeb.Resolvers.User do
     end
   end
 
-  @spec signup(
-          any,
-          %{input: :invalid | %{optional(:__struct__) => none, optional(atom | binary) => any}},
-          any
-        ) :: {:error, [{:details, map} | {:message, <<_::168>>}, ...]} | {:ok, any}
   def signup(_, %{input: input}, _) do
     case Accounts.create_user(input) do
       {:error, changeset} ->

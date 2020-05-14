@@ -7,6 +7,8 @@ defmodule ReviewApiWeb.Schema.Types.OrganizationType do
   #   value(:organization)
   # end
 
+  # connection(node_type: :organization)
+
   node object(:organization) do
     field(:name, :string)
     field(:email, :string)

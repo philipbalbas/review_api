@@ -10,7 +10,7 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     {:ok, Tests.list_exams(args)}
   end
 
-  def get_exam(_, %{id: id}, _) do
+  def get_exam(%{id: id}, _) do
     {:ok, Tests.get_exam!(id)}
   end
 

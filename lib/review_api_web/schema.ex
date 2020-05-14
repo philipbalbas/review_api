@@ -1,6 +1,7 @@
 defmodule ReviewApiWeb.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :modern
+  alias Absinthe.Relay.Node.Helpers
   alias ReviewApiWeb.Resolvers
   import_types(ReviewApiWeb.Schema.Types)
 
@@ -95,7 +96,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get an organization"
     field :organization, :organization do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Organization.organization/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Organization.organization/2, id: :organization))
     end
 
     @desc "Get a list of users"
@@ -106,7 +107,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a user"
     field :user, :user do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.User.user/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.User.user/2, id: :user))
     end
 
     @desc "Get a list of categories"
@@ -123,7 +124,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single module"
     field :module, :module do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Lecture.module/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.module/2, id: :module))
     end
 
     @desc "Get a list subjects"
@@ -135,7 +136,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single subject"
     field :subject, :subject do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Lecture.subject/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.subject/2, id: :subject))
     end
 
     @desc "Get a list topics"
@@ -147,7 +148,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single topic"
     field :topic, :topic do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Lecture.topic/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.topic/2, id: :topic))
     end
 
     @desc "Get a list of pages"
@@ -159,7 +160,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single page"
     field :page, :page do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Lecture.page/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.page/2, id: :page))
     end
 
     @desc "Get a list of notes"
@@ -171,7 +172,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single note"
     field :note, :note do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Lecture.note/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.note/2, id: :note))
     end
 
     @desc "Get a list of exams"
@@ -183,7 +184,7 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single exam"
     field :get_exam, :exam do
       arg(:id, non_null(:id))
-      resolve(&Resolvers.Tests.get_exam/3)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Tests.get_exam/2, id: :exam))
     end
 
     @desc "Get a list of cards"

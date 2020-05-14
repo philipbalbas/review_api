@@ -10,7 +10,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_modules(args)}
   end
 
-  def module(_, %{id: id}, _) do
+  def module(%{id: id}, _) do
     {:ok, Lecture.get_module!(id)}
   end
 
@@ -18,7 +18,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_subjects(args)}
   end
 
-  def subject(_, %{id: id}, _) do
+  def subject(%{id: id}, _) do
     {:ok, Lecture.get_subject!(id)}
   end
 
@@ -26,7 +26,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_topics(args)}
   end
 
-  def topic(_, %{id: id}, _) do
+  def topic(%{id: id}, _) do
     {:ok, Lecture.get_topic!(id)}
   end
 
@@ -34,7 +34,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_pages(args)}
   end
 
-  def page(_, %{id: id}, _) do
+  def page(%{id: id}, _) do
     {:ok, Lecture.get_page!(id)}
   end
 
@@ -42,7 +42,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_notes(args)}
   end
 
-  def note(_, %{id: id}, _) do
+  def note(%{id: id}, _) do
     {:ok, Lecture.get_note!(id)}
   end
 

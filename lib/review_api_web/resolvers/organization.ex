@@ -6,7 +6,7 @@ defmodule ReviewApiWeb.Resolvers.Organization do
     {:ok, Accounts.list_organizations()}
   end
 
-  def organization(_, %{id: id}, _) do
+  def organization(%{id: id}, _) do
     {:ok, Accounts.get_organization!(id)}
   end
 
