@@ -1,8 +1,8 @@
 defmodule ReviewApiWeb.Schema.Types.UserType do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :modern
 
-  object :user do
-    field(:id, :id)
+  node object(:user) do
     field(:username, :string)
     field(:first_name, :string)
     field(:last_name, :string)
@@ -11,7 +11,7 @@ defmodule ReviewApiWeb.Schema.Types.UserType do
     field(:role, :string)
   end
 
-  object :session do
+  node object(:session) do
     field :token, non_null(:string)
     field :user, non_null(:user)
   end

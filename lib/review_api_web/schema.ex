@@ -1,11 +1,62 @@
 defmodule ReviewApiWeb.Schema do
   use Absinthe.Schema
+  use Absinthe.Relay.Schema, :modern
   alias ReviewApiWeb.Resolvers
   import_types(ReviewApiWeb.Schema.Types)
 
   alias ReviewApi.{Accounts, Lecture, Tests}
 
+  node interface do
+    resolve_type(fn
+      %ReviewApi.Accounts.Organization{}, _ ->
+        :organization
+
+      %ReviewApi.Accounts.User{}, _ ->
+        :user
+
+      %ReviewApi.Lecture.Module{}, _ ->
+        :module
+
+      %ReviewApi.Lecture.Category{}, _ ->
+        :category
+
+      %ReviewApi.Lecture.Subject{}, _ ->
+        :subject
+
+      %ReviewApi.Lecture.Topic{}, _ ->
+        :topic
+
+      %ReviewApi.Lecture.Page{}, _ ->
+        :page
+
+      %ReviewApi.Lecture.Note{}, _ ->
+        :note
+
+      %ReviewApi.Tests.Exam{}, _ ->
+        :exam
+
+      %ReviewApi.Tests.Card{}, _ ->
+        :card
+
+      %ReviewApi.Tests.Choice{}, _ ->
+        :choice
+
+      _, _ ->
+        nil
+    end)
+  end
+
   query do
+    node field do
+      resolve(fn
+        %{type: :organization, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Accounts.Organization, local_id)}
+
+        _, _ ->
+          {:error, "Unknown node"}
+      end)
+    end
+
     @desc "Get a list of organizations"
     field :organizations, list_of(:organization) do
       resolve(&Resolvers.Organization.organizations/3)

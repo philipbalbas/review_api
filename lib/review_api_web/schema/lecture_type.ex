@@ -1,10 +1,10 @@
 defmodule ReviewApiWeb.Schema.Types.LectureType do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :modern
   import Absinthe.Resolution.Helpers, only: [dataloader: 3]
   alias ReviewApi.{Lecture, Tests}
 
-  object :category do
-    field :id, non_null(:id)
+  node object(:category) do
     field :description, non_null(:string)
     field :name, non_null(:string)
 
@@ -17,8 +17,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     end
   end
 
-  object :module do
-    field(:id, :id)
+  node object(:module) do
     field(:name, :string)
     field(:description, :string)
     field :category_id, :id
@@ -28,8 +27,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     end
   end
 
-  object :subject do
-    field(:id, :id)
+  node object(:subject) do
     field(:name, :string)
     field(:description, :string)
     field(:module_id, :id)
@@ -39,8 +37,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     end
   end
 
-  object :topic do
-    field(:id, :id)
+  node object(:topic) do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
@@ -55,8 +52,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     end
   end
 
-  object :page do
-    field(:id, :id)
+  node object(:page) do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
@@ -67,8 +63,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     end
   end
 
-  object :note do
-    field(:id, :id)
+  node object(:note) do
     field(:name, :string)
     field(:content, :string)
     field(:page_id, :id)

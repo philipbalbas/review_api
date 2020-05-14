@@ -1,5 +1,6 @@
 defmodule ReviewApiWeb.Schema.Types.TestsType do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :modern
   import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
   alias ReviewApi.Tests
 
@@ -14,8 +15,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     value(:multiple, as: "multiple", description: "Multiple Answers")
   end
 
-  object :exam do
-    field :id, non_null(:id)
+  node object(:exam) do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
     field :category_id, non_null(:id)
@@ -25,8 +25,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     end
   end
 
-  object :card do
-    field :id, non_null(:id)
+  node object(:card) do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
@@ -36,8 +35,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :answers, list_of(:choice), resolve: dataloader(Tests)
   end
 
-  object :choice do
-    field :id, non_null(:string)
+  node object(:choice) do
     field :content, non_null(:string)
   end
 
