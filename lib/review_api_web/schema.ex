@@ -14,11 +14,11 @@ defmodule ReviewApiWeb.Schema do
       %ReviewApi.Accounts.User{}, _ ->
         :user
 
-      %ReviewApi.Lecture.Module{}, _ ->
-        :module
-
       %ReviewApi.Lecture.Category{}, _ ->
         :category
+
+      %ReviewApi.Lecture.Module{}, _ ->
+        :module
 
       %ReviewApi.Lecture.Subject{}, _ ->
         :subject
@@ -51,6 +51,36 @@ defmodule ReviewApiWeb.Schema do
       resolve(fn
         %{type: :organization, id: local_id}, _ ->
           {:ok, ReviewApi.Repo.get(ReviewApi.Accounts.Organization, local_id)}
+
+        %{type: :user, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Accounts.User, local_id)}
+
+        %{type: :category, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Category, local_id)}
+
+        %{type: :module, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Module, local_id)}
+
+        %{type: :subject, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Subject, local_id)}
+
+        %{type: :topic, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Topic, local_id)}
+
+        %{type: :page, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Page, local_id)}
+
+        %{type: :note, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Lecture.Note, local_id)}
+
+        %{type: :exam, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Tests.Exam, local_id)}
+
+        %{type: :card, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Tests.Card, local_id)}
+
+        %{type: :choice, id: local_id}, _ ->
+          {:ok, ReviewApi.Repo.get(ReviewApi.Tests.Choice, local_id)}
 
         _, _ ->
           {:error, "Unknown node"}
