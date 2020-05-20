@@ -6,6 +6,10 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.list_categories()}
   end
 
+  def get_category(%{id: id}, _) do
+    {:ok, Lecture.get_category!(id)}
+  end
+
   def modules(_, args, _) do
     {:ok, Lecture.list_modules(args)}
   end

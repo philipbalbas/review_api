@@ -115,6 +115,12 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Lecture.list_categories/3)
     end
 
+    @desc "Get a single category"
+    field :get_category, :category do
+      arg(:id, non_null(:id))
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_category/2, id: :category))
+    end
+
     @desc "Get a list of modules"
     field :modules, list_of(:module) do
       arg(:order, type: :sort_order, default_value: :asc)
