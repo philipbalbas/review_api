@@ -18,9 +18,9 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   end
 
   node object(:module) do
-    field(:name, :string)
-    field(:description, :string)
-    field :category_id, :id
+    field(:name, non_null(:string))
+    field(:description, non_null(:string))
+    field(:category_id, :id)
 
     field :subjects, list_of(:subject) do
       resolve(dataloader(Lecture, :subjects, args: %{scope: :module}))
