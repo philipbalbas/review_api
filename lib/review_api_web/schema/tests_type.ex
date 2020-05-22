@@ -19,6 +19,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
     field :category_id, non_null(:id)
+    field :description, non_null(:string)
 
     field :cards, list_of(:card) do
       resolve(dataloader(Tests, :cards, args: %{scope: :exam}))
@@ -52,6 +53,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   input_object :create_exam_input do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
+    field :description, non_null(:string)
     field :category_id, non_null(:id)
   end
 

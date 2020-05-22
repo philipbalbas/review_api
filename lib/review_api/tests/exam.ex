@@ -8,6 +8,7 @@ defmodule ReviewApi.Tests.Exam do
   schema "exams" do
     field :name, :string
     field :type, :string
+    field :description, :string
 
     belongs_to :category, ReviewApi.Lecture.Category
     many_to_many :cards, ReviewApi.Tests.Card, join_through: "exams_cards", on_replace: :delete
@@ -18,7 +19,7 @@ defmodule ReviewApi.Tests.Exam do
   @doc false
   def changeset(exam, attrs) do
     exam
-    |> cast(attrs, [:name, :type, :category_id])
+    |> cast(attrs, [:name, :type, :description, :category_id])
     |> validate_required([:name])
   end
 
