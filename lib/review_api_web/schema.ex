@@ -123,15 +123,15 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of modules"
-    field :modules, list_of(:module) do
+    field :list_modules, list_of(:module) do
       arg(:order, type: :sort_order, default_value: :asc)
-      resolve(&Resolvers.Lecture.modules/3)
+      resolve(&Resolvers.Lecture.list_modules/3)
     end
 
     @desc "Get a single module"
-    field :module, :module do
+    field :get_module, :module do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.module/2, id: :module))
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_module/2, id: :module))
     end
 
     @desc "Get a list subjects"
@@ -255,8 +255,15 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a module"
-    field :create_module, :module do
-      arg(:input, non_null(:module_input))
+    payload field :create_module do
+      input do
+        field :input_data, non_null(:module_input)
+      end
+
+      output do
+        field :result, :module
+      end
+
       resolve(&Resolvers.Lecture.create_module/3)
     end
 
@@ -279,8 +286,15 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Update a module"
-    field :update_module, :module do
-      arg(:input, non_null(:update_module_input))
+    payload field :update_module do
+      input do
+        field :input_data, non_null(:module_input_update)
+      end
+
+      output do
+        field :result, :module
+      end
+
       resolve(&Resolvers.Lecture.update_module/3)
     end
 

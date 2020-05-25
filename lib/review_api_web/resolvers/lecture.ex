@@ -10,11 +10,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_category!(id)}
   end
 
-  def modules(_, args, _) do
+  def list_modules(_, args, _) do
     {:ok, Lecture.list_modules(args)}
   end
 
-  def module(%{id: id}, _) do
+  def get_module(%{id: id}, _) do
     {:ok, Lecture.get_module!(id)}
   end
 
@@ -79,8 +79,13 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def create_module(_, %{input: input}, _) do
-    case Lecture.create_module(input) do
+  def create_module(_, %{input_data: input}, _) do
+    {:ok, %{id: internal_id}} =
+      Absinthe.Relay.Node.from_global_id(input[:category_id], ReviewApiWeb.Schema)
+
+    module = Map.merge(input, %{category_id: internal_id})
+
+    case Lecture.create_module(module) do
       {:error, changeset} ->
         {
           :error,
@@ -88,7 +93,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, module} ->
-        {:ok, module}
+        {:ok, %{result: module}}
     end
   end
 
@@ -131,8 +136,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def update_module(_, %{input: input}, _) do
-    module = Lecture.get_module!(input[:id])
+  def update_module(_, %{input_data: input}, _) do
+    {:ok, %{id: internal_id}} =
+      Absinthe.Relay.Node.from_global_id(input[:id], ReviewApiWeb.Schema)
+
+    module = Lecture.get_module!(internal_id)
 
     case Lecture.update_module(module, input) do
       {:error, changeset} ->
@@ -142,7 +150,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, module} ->
-        {:ok, module}
+        {:ok, %{result: module}}
     end
   end
 
