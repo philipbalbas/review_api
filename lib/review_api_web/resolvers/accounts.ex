@@ -1,13 +1,35 @@
-defmodule ReviewApiWeb.Resolvers.User do
+defmodule ReviewApiWeb.Resolvers.Accounts do
   alias ReviewApi.Accounts
   alias ReviewApiWeb.Schema.ChangesetErrors
 
-  def users(_, _, _) do
+  def list_organizations(_, _, _) do
+    {:ok, Accounts.list_organizations()}
+  end
+
+  def get_organization(%{id: id}, _) do
+    {:ok, Accounts.get_organization!(id)}
+  end
+
+  def list_users(_, _, _) do
     {:ok, Accounts.list_users()}
   end
 
-  def user(%{id: id}, _) do
+  def get_user(%{id: id}, _) do
     {:ok, Accounts.get_user!(id)}
+  end
+
+  def create_organization(_, %{input_data: args}, _) do
+    case Accounts.create_organization(args) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create organization",
+          details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, organization} ->
+        {:ok, %{result: organization}}
+    end
   end
 
   def signin(_, %{email: email, password: password}, _) do

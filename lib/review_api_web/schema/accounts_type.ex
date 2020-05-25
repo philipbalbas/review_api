@@ -1,4 +1,4 @@
-defmodule ReviewApiWeb.Schema.Types.OrganizationType do
+defmodule ReviewApiWeb.Schema.Types.AccountsType do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
 

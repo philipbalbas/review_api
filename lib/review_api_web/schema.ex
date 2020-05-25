@@ -89,25 +89,26 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of organizations"
-    field :organizations, list_of(:organization) do
-      resolve(&Resolvers.Organization.organizations/3)
+    field :list_organizations, list_of(:organization) do
+      resolve(&Resolvers.Accounts.list_organizations/3)
     end
 
     @desc "Get an organization"
-    field :organization, :organization do
+    field :get_organization, :organization do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Organization.organization/2, id: :organization))
+
+      resolve(Helpers.parsing_node_ids(&Resolvers.Accounts.get_organization/2, id: :organization))
     end
 
     @desc "Get a list of users"
     field :users, list_of(:user) do
-      resolve(&Resolvers.User.users/3)
+      resolve(&Resolvers.Accounts.list_users/3)
     end
 
     @desc "Get a user"
     field :user, :user do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.User.user/2, id: :user))
+      resolve(Helpers.parsing_node_ids(&Resolvers.Accounts.get_user/2, id: :user))
     end
 
     @desc "Get a list of categories"
@@ -202,27 +203,29 @@ defmodule ReviewApiWeb.Schema do
 
   mutation do
     @desc "Create an organization"
-    field :create_organization, :organization do
-      arg(:city, :string)
-      arg(:email, :string)
-      arg(:name, non_null(:string))
-      arg(:phone, :string)
-      arg(:street, :string)
-      arg(:role, non_null(:string))
-      resolve(&Resolvers.Organization.create_organization/3)
+    payload field :create_organization do
+      input do
+        field :input_data, non_null(:organization_input)
+      end
+
+      output do
+        field :result, :organization
+      end
+
+      resolve(&Resolvers.Accounts.create_organization/3)
     end
 
     @desc "Signin a user"
     field :signin, :session do
       arg(:email, :string)
       arg(:password, :string)
-      resolve(&Resolvers.User.signin/3)
+      resolve(&Resolvers.Accounts.signin/3)
     end
 
     @desc "Signup a user"
     field :signup, :user do
       arg(:input, non_null(:user_input))
-      resolve(&Resolvers.User.signup/3)
+      resolve(&Resolvers.Accounts.signup/3)
     end
 
     @desc "Create a category"
