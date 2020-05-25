@@ -50,19 +50,22 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_note!(id)}
   end
 
-  def create_category(_, %{input: input}, _) do
-    case Lecture.create_category(input) do
+  def create_category(_, %{input_data: args}, _) do
+    case Lecture.create_category(args) do
       {:error, changeset} ->
         {:error,
          message: "Could not create category", details: ChangesetErrors.error_details(changeset)}
 
       {:ok, category} ->
-        {:ok, category}
+        {:ok, %{result: category}}
     end
   end
 
-  def update_category(_, %{input: input}, _) do
-    category = Lecture.get_category!(input[:id])
+  def update_category(_, %{input_data: input}, _) do
+    {:ok, %{id: internal_id}} =
+      Absinthe.Relay.Node.from_global_id(input[:id], ReviewApiWeb.Schema)
+
+    category = Lecture.get_category!(internal_id)
 
     case Lecture.update_category(category, input) do
       {:error, changeset} ->
@@ -72,7 +75,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, category} ->
-        {:ok, category}
+        {:ok, %{result: category}}
     end
   end
 

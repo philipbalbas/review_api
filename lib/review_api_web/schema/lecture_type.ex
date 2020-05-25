@@ -70,15 +70,15 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:description, :string)
   end
 
-  input_object :create_category_input do
-    field :name, non_null(:string)
-    field :description, non_null(:string)
+  input_object :category_input_create do
+    field(:name, non_null(:string))
+    field(:description, non_null(:string))
   end
 
-  input_object :update_category_input do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
-    field :description, :string
+  input_object :category_input_update do
+    field(:id, non_null(:id))
+    field(:name, :string)
+    field(:description, :string)
   end
 
   input_object :module_input do

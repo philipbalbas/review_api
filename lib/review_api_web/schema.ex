@@ -229,14 +229,28 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a category"
-    field :create_category, :category do
-      arg(:input, non_null(:create_category_input))
+    payload field :create_category do
+      input do
+        field :input_data, non_null(:category_input_create)
+      end
+
+      output do
+        field :result, :category
+      end
+
       resolve(&Resolvers.Lecture.create_category/3)
     end
 
     @desc "Update a category"
-    field :update_category, :category do
-      arg(:input, non_null(:update_category_input))
+    payload field :update_category do
+      input do
+        field :input_data, non_null(:category_input_update)
+      end
+
+      output do
+        field :result, :category
+      end
+
       resolve(&Resolvers.Lecture.update_category/3)
     end
 
