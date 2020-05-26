@@ -1,7 +1,7 @@
 defmodule ReviewApiWeb.Schema do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :modern
-  alias Absinthe.Relay.Node.Helpers
+  alias Absinthe.Relay.Node.ParseIDs
   alias ReviewApiWeb.Resolvers
   import_types(ReviewApiWeb.Schema.Types)
 
@@ -97,7 +97,8 @@ defmodule ReviewApiWeb.Schema do
     field :get_organization, :organization do
       arg(:id, non_null(:id))
 
-      resolve(Helpers.parsing_node_ids(&Resolvers.Accounts.get_organization/2, id: :organization))
+      middleware(ParseIDs, id: :organization)
+      resolve(&Resolvers.Accounts.get_organization/2)
     end
 
     @desc "Get a list of users"
@@ -108,7 +109,9 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a user"
     field :user, :user do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Accounts.get_user/2, id: :user))
+
+      middleware(ParseIDs, id: :user)
+      resolve(&Resolvers.Accounts.get_user/2)
     end
 
     @desc "Get a list of categories"
@@ -119,7 +122,9 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single category"
     field :get_category, :category do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_category/2, id: :category))
+
+      middleware(ParseIDs, id: :category)
+      resolve(&Resolvers.Lecture.get_category/2)
     end
 
     @desc "Get a list of modules"
@@ -131,7 +136,9 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single module"
     field :get_module, :module do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_module/2, id: :module))
+
+      middleware(ParseIDs, id: :module)
+      resolve(&Resolvers.Lecture.get_module/2)
     end
 
     @desc "Get a list subjects"
@@ -139,7 +146,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:module_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
-      middleware(Absinthe.Relay.Node.ParseIDs, module_id: :module)
+      middleware(ParseIDs, module_id: :module)
       resolve(&Resolvers.Lecture.list_subjects/3)
     end
 
@@ -147,7 +154,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_subject, :subject do
       arg(:id, non_null(:id))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, id: :subject)
+      middleware(ParseIDs, id: :subject)
       resolve(&Resolvers.Lecture.get_subject/2)
     end
 
@@ -156,7 +163,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:subject_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
-      middleware(Absinthe.Relay.Node.ParseIDs, subject_id: :subject)
+      middleware(ParseIDs, subject_id: :subject)
       resolve(&Resolvers.Lecture.list_topics/3)
     end
 
@@ -164,7 +171,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_topic, :topic do
       arg(:id, non_null(:id))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, id: :topic)
+      middleware(ParseIDs, id: :topic)
       resolve(&Resolvers.Lecture.get_topic/2)
     end
 
@@ -173,7 +180,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:topic_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
-      middleware(Absinthe.Relay.Node.ParseIDs, topic_id: :topic)
+      middleware(ParseIDs, topic_id: :topic)
       resolve(&Resolvers.Lecture.list_pages/3)
     end
 
@@ -181,7 +188,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_page, :page do
       arg(:id, non_null(:id))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, id: :page)
+      middleware(ParseIDs, id: :page)
       resolve(&Resolvers.Lecture.get_page/2)
     end
 
@@ -190,7 +197,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:page_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
-      middleware(Absinthe.Relay.Node.ParseIDs, page_id: :page)
+      middleware(ParseIDs, page_id: :page)
       resolve(&Resolvers.Lecture.list_notes/3)
     end
 
@@ -198,7 +205,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_note, :note do
       arg(:id, non_null(:id))
 
-      middleware(Absinthe.Relay.Node.ParseIDs, id: :note)
+      middleware(ParseIDs, id: :note)
       resolve(&Resolvers.Lecture.get_note/2)
     end
 
@@ -211,7 +218,9 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a single exam"
     field :get_exam, :exam do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Tests.get_exam/2, id: :exam))
+
+      middleware(ParseIDs, id: :exam)
+      resolve(&Resolvers.Tests.get_exam/2)
     end
 
     @desc "Get a list of cards"
@@ -310,7 +319,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :subject
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [module_id: :module]
       )
 
@@ -327,7 +336,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :subject
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [id: :subject]
       )
 
@@ -344,7 +353,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :topic
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [subject_id: :subject]
       )
 
@@ -361,7 +370,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :topic
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [id: :topic]
       )
 
@@ -378,7 +387,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :page
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [topic_id: :topic]
       )
 
@@ -395,7 +404,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :page
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [id: :page]
       )
 
@@ -412,7 +421,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :note
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [page_id: :page]
       )
 
@@ -429,7 +438,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :note
       end
 
-      middleware(Absinthe.Relay.Node.ParseIDs,
+      middleware(ParseIDs,
         input_data: [id: :note]
       )
 
