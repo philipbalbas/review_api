@@ -169,15 +169,20 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of pages"
-    field :pages, list_of(:page) do
+    field :list_pages, list_of(:page) do
+      arg(:topic_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
-      resolve(&Resolvers.Lecture.pages/3)
+
+      middleware(Absinthe.Relay.Node.ParseIDs, topic_id: :topic)
+      resolve(&Resolvers.Lecture.list_pages/3)
     end
 
     @desc "Get a single page"
-    field :page, :page do
+    field :get_page, :page do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.page/2, id: :page))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, id: :page)
+      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_page/2, id: :page))
     end
 
     @desc "Get a list of notes"
@@ -359,14 +364,36 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a page"
-    field :create_page, :page do
-      arg(:input, non_null(:page_input))
+    payload field :create_page do
+      input do
+        field :input_data, non_null(:page_create_input)
+      end
+
+      output do
+        field :result, :page
+      end
+
+      middleware(Absinthe.Relay.Node.ParseIDs,
+        input_data: [topic_id: :topic]
+      )
+
       resolve(&Resolvers.Lecture.create_page/3)
     end
 
     @desc "Update a page"
-    field :update_page, :page do
-      arg(:input, non_null(:update_page_input))
+    payload field :update_page do
+      input do
+        field :input, non_null(:page_update_input)
+      end
+
+      output do
+        field :result, :page
+      end
+
+      middleware(Absinthe.Relay.Node.ParseIDs,
+        input_data: [id: :page]
+      )
+
       resolve(&Resolvers.Lecture.update_page/3)
     end
 

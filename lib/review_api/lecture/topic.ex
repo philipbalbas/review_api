@@ -19,7 +19,7 @@ defmodule ReviewApi.Lecture.Topic do
   def changeset(topic, attrs) do
     topic
     |> cast(attrs, [:name, :description, :content, :subject_id])
-    |> unique_constraint(:name)
+    |> unique_constraint([:name, :subject_id])
     |> validate_required([:name, :subject_id])
     |> assoc_constraint(:subject)
   end

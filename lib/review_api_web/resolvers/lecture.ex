@@ -34,11 +34,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_topic!(id)}
   end
 
-  def pages(_, args, _) do
+  def list_pages(_, args, _) do
     {:ok, Lecture.list_pages(args)}
   end
 
-  def page(%{id: id}, _) do
+  def get_page(%{id: id}, _) do
     {:ok, Lecture.get_page!(id)}
   end
 
@@ -174,7 +174,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def create_page(_, %{input: input}, _) do
+  def create_page(_, %{input_data: input}, _) do
     case Lecture.create_page(input) do
       {:error, changeset} ->
         {
@@ -183,11 +183,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, page} ->
-        {:ok, page}
+        {:ok, %{result: page}}
     end
   end
 
-  def update_page(_, %{input: input}, _) do
+  def update_page(_, %{input_data: input}, _) do
     page = Lecture.get_page!(input[:id])
 
     case Lecture.update_page(page, input) do
@@ -198,7 +198,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, page} ->
-        {:ok, page}
+        {:ok, %{result: page}}
     end
   end
 

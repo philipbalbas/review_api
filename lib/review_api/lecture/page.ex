@@ -18,7 +18,7 @@ defmodule ReviewApi.Lecture.Page do
   def changeset(page, attrs) do
     page
     |> cast(attrs, [:name, :description, :content, :topic_id])
-    |> unique_constraint(:name)
+    |> unique_constraint([:name, :topic_id])
     |> validate_required([:name, :topic_id])
     |> assoc_constraint(:topic)
   end
