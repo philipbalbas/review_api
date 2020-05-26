@@ -135,15 +135,20 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list subjects"
-    field :subjects, list_of(:subject) do
+    field :list_subjects, list_of(:subject) do
+      arg(:module_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
-      resolve(&Resolvers.Lecture.subjects/3)
+
+      middleware(Absinthe.Relay.Node.ParseIDs, module_id: :module)
+      resolve(&Resolvers.Lecture.list_subjects/3)
     end
 
     @desc "Get a single subject"
-    field :subject, :subject do
+    field :get_subject, :subject do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.subject/2, id: :subject))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, id: :subject)
+      resolve(&Resolvers.Lecture.get_subject/2)
     end
 
     @desc "Get a list topics"
@@ -268,8 +273,19 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a subject"
-    field :create_subject, :subject do
-      arg(:input, non_null(:subject_input))
+    payload field :create_subject do
+      input do
+        field :input_data, non_null(:subject_create_input)
+      end
+
+      output do
+        field :result, :subject
+      end
+
+      middleware(Absinthe.Relay.Node.ParseIDs,
+        input_data: [module_id: :module]
+      )
+
       resolve(&Resolvers.Lecture.create_subject/3)
     end
 
@@ -299,8 +315,15 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Update a subject"
-    field :update_subject, :subject do
-      arg(:input, non_null(:update_subject_input))
+    payload field :update_subject do
+      input do
+        field :input_data, non_null(:subject_update_input)
+      end
+
+      output do
+        field :result, :subject
+      end
+
       resolve(&Resolvers.Lecture.update_subject/3)
     end
 

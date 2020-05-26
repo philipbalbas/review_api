@@ -18,11 +18,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_module!(id)}
   end
 
-  def subjects(_, args, _) do
+  def list_subjects(_, args, _) do
     {:ok, Lecture.list_subjects(args)}
   end
 
-  def subject(%{id: id}, _) do
+  def get_subject(%{id: id}, _) do
     {:ok, Lecture.get_subject!(id)}
   end
 
@@ -97,7 +97,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def create_subject(_, %{input: input}, _) do
+  def create_subject(_, %{input_data: input}, _) do
     case Lecture.create_subject(input) do
       {:error, changeset} ->
         {
@@ -106,7 +106,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, subject} ->
-        {:ok, subject}
+        {:ok, %{result: subject}}
     end
   end
 
@@ -154,8 +154,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def update_subject(_, %{input: input}, _) do
-    subject = Lecture.get_subject!(input[:id])
+  def update_subject(_, %{input_data: input}, _) do
+    {:ok, %{id: internal_id}} =
+      Absinthe.Relay.Node.from_global_id(input[:id], ReviewApiWeb.Schema)
+
+    subject = Lecture.get_subject!(internal_id)
 
     case Lecture.update_subject(subject, input) do
       {:error, changeset} ->
@@ -165,7 +168,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, subject} ->
-        {:ok, subject}
+        {:ok, %{result: subject}}
     end
   end
 

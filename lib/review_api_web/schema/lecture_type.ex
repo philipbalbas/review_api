@@ -1,7 +1,7 @@
 defmodule ReviewApiWeb.Schema.Types.LectureType do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
-  import Absinthe.Resolution.Helpers, only: [dataloader: 3]
+  import Absinthe.Resolution.Helpers, only: [dataloader: 3, dataloader: 1]
   alias ReviewApi.{Lecture, Tests}
 
   node object(:category) do
@@ -20,9 +20,9 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   node object(:module) do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
-    field(:category_id, non_null(:id))
+    field(:category, :category, resolve: dataloader(Lecture))
 
-    field :subjects, list_of(:subject) do
+    field(:subjects, list_of(:subject)) do
       resolve(dataloader(Lecture, :subjects, args: %{scope: :module}))
     end
   end
@@ -30,7 +30,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   node object(:subject) do
     field(:name, :string)
     field(:description, :string)
-    field(:module_id, :id)
+    field(:module, :module, resolve: dataloader(Lecture))
 
     field :topics, list_of(:topic) do
       resolve(dataloader(Lecture, :topics, args: %{scope: :subject}))
@@ -87,7 +87,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:category_id, non_null(:id))
   end
 
-  input_object :subject_input do
+  input_object :subject_create_input do
     field(:name, non_null(:string))
     field(:description, :string)
     field(:module_id, non_null(:id))
@@ -121,10 +121,10 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:category_id, :id)
   end
 
-  input_object :update_subject_input do
+  input_object :subject_update_input do
     field(:id, non_null(:id))
     field(:module_id, :id)
-    field(:name, non_null(:string))
+    field(:name, :string)
     field(:description, :string)
   end
 
