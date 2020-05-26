@@ -56,7 +56,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, :string)
     field(:content, :string)
     field(:description, :string)
-    field(:topic_id, :id)
+    field(:topic, :topic, resolve: dataloader(Lecture))
 
     field :notes, list_of(:note) do
       resolve(dataloader(Lecture, :notes, args: %{scope: :page}))
@@ -66,7 +66,8 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   node object(:note) do
     field(:name, :string)
     field(:content, :string)
-    field(:page_id, :id)
+    field(:page, :page, resolve: dataloader(Lecture))
+
     field(:description, :string)
   end
 
@@ -85,6 +86,13 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
     field(:category_id, non_null(:id))
+  end
+
+  input_object :module_input_update do
+    field(:id, non_null(:id))
+    field(:name, :string)
+    field(:description, :string)
+    field(:category_id, :id)
   end
 
   input_object :subject_create_input do
@@ -128,21 +136,14 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:content, :string)
   end
 
-  input_object :note_input do
+  input_object :note_create_input do
     field(:name, non_null(:string))
     field(:description, :string)
     field(:content, :string)
     field(:page_id, non_null(:id))
   end
 
-  input_object :module_input_update do
-    field(:id, non_null(:id))
-    field(:name, :string)
-    field(:description, :string)
-    field(:category_id, :id)
-  end
-
-  input_object :update_note_input do
+  input_object :note_update_input do
     field(:id, non_null(:id))
     field(:name, :string)
     field(:content, :string)

@@ -182,19 +182,24 @@ defmodule ReviewApiWeb.Schema do
       arg(:id, non_null(:id))
 
       middleware(Absinthe.Relay.Node.ParseIDs, id: :page)
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.get_page/2, id: :page))
+      resolve(&Resolvers.Lecture.get_page/2)
     end
 
     @desc "Get a list of notes"
-    field :notes, list_of(:note) do
+    field :list_notes, list_of(:note) do
+      arg(:page_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
-      resolve(&Resolvers.Lecture.notes/3)
+
+      middleware(Absinthe.Relay.Node.ParseIDs, page_id: :page)
+      resolve(&Resolvers.Lecture.list_notes/3)
     end
 
     @desc "Get a single note"
-    field :note, :note do
+    field :get_note, :note do
       arg(:id, non_null(:id))
-      resolve(Helpers.parsing_node_ids(&Resolvers.Lecture.note/2, id: :note))
+
+      middleware(Absinthe.Relay.Node.ParseIDs, id: :note)
+      resolve(&Resolvers.Lecture.get_note/2)
     end
 
     @desc "Get a list of exams"
@@ -398,14 +403,36 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a note"
-    field :create_note, :note do
-      arg(:input, non_null(:note_input))
+    payload field :create_note do
+      input do
+        field(:input_data, non_null(:note_create_input))
+      end
+
+      output do
+        field :result, :note
+      end
+
+      middleware(Absinthe.Relay.Node.ParseIDs,
+        input_data: [page_id: :page]
+      )
+
       resolve(&Resolvers.Lecture.create_note/3)
     end
 
     @desc "Update a note"
-    field :update_note, :note do
-      arg(:input, non_null(:update_note_input))
+    payload field :update_note do
+      input do
+        field(:input_data, non_null(:note_update_input))
+      end
+
+      output do
+        field :result, :note
+      end
+
+      middleware(Absinthe.Relay.Node.ParseIDs,
+        input_data: [id: :note]
+      )
+
       resolve(&Resolvers.Lecture.update_note/3)
     end
 

@@ -42,11 +42,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_page!(id)}
   end
 
-  def notes(_, args, _) do
+  def list_notes(_, args, _) do
     {:ok, Lecture.list_notes(args)}
   end
 
-  def note(%{id: id}, _) do
+  def get_note(%{id: id}, _) do
     {:ok, Lecture.get_note!(id)}
   end
 
@@ -202,7 +202,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def create_note(_, %{input: input}, _) do
+  def create_note(_, %{input_data: input}, _) do
     case Lecture.create_note(input) do
       {:error, changeset} ->
         {
@@ -211,11 +211,12 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, note} ->
-        {:ok, note}
+        {:ok, %{result: note}}
     end
   end
 
-  def update_note(_, %{input: input}, _) do
+  def update_note(_, %{input_data: input}, _) do
+    IO.inspect(input)
     note = Lecture.get_note!(input[:id])
 
     case Lecture.update_note(note, input) do
@@ -226,7 +227,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, note} ->
-        {:ok, note}
+        {:ok, %{result: note}}
     end
   end
 end
