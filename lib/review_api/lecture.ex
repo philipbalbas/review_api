@@ -237,6 +237,9 @@ defmodule ReviewApi.Lecture do
     Enum.reduce(criteria, query, fn
       {:order, order}, query ->
         from(p in query, order_by: [{^order, :id}])
+
+      {:subject_id, subject_id}, query ->
+        from(p in query, where: p.subject_id == ^subject_id)
     end)
     |> Repo.all()
   end

@@ -26,11 +26,11 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     {:ok, Lecture.get_subject!(id)}
   end
 
-  def topics(_, args, _) do
+  def list_topics(_, args, _) do
     {:ok, Lecture.list_topics(args)}
   end
 
-  def topic(%{id: id}, _) do
+  def get_topic(%{id: id}, _) do
     {:ok, Lecture.get_topic!(id)}
   end
 
@@ -97,45 +97,6 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def create_subject(_, %{input_data: input}, _) do
-    case Lecture.create_subject(input) do
-      {:error, changeset} ->
-        {
-          :error,
-          message: "Could not create subject", details: ChangesetErrors.error_details(changeset)
-        }
-
-      {:ok, subject} ->
-        {:ok, %{result: subject}}
-    end
-  end
-
-  def create_topic(_, %{input: input}, _) do
-    case Lecture.create_topic(input) do
-      {:error, changeset} ->
-        {
-          :error,
-          message: "Could not create topic", details: ChangesetErrors.error_details(changeset)
-        }
-
-      {:ok, topic} ->
-        {:ok, topic}
-    end
-  end
-
-  def create_page(_, %{input: input}, _) do
-    case Lecture.create_page(input) do
-      {:error, changeset} ->
-        {
-          :error,
-          message: "Could not create page", details: ChangesetErrors.error_details(changeset)
-        }
-
-      {:ok, page} ->
-        {:ok, page}
-    end
-  end
-
   def update_module(_, %{input_data: input}, _) do
     {:ok, %{id: internal_id}} =
       Absinthe.Relay.Node.from_global_id(input[:id], ReviewApiWeb.Schema)
@@ -151,6 +112,19 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
 
       {:ok, module} ->
         {:ok, %{result: module}}
+    end
+  end
+
+  def create_subject(_, %{input_data: input}, _) do
+    case Lecture.create_subject(input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create subject", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, subject} ->
+        {:ok, %{result: subject}}
     end
   end
 
@@ -172,7 +146,20 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
     end
   end
 
-  def update_topic(_, %{input: input}, _) do
+  def create_topic(_, %{input_data: input}, _) do
+    case Lecture.create_topic(input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create topic", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, topic} ->
+        {:ok, %{result: topic}}
+    end
+  end
+
+  def update_topic(_, %{input_data: input}, _) do
     topic = Lecture.get_topic!(input[:id])
 
     case Lecture.update_topic(topic, input) do
@@ -183,7 +170,20 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
         }
 
       {:ok, topic} ->
-        {:ok, topic}
+        {:ok, %{result: topic}}
+    end
+  end
+
+  def create_page(_, %{input: input}, _) do
+    case Lecture.create_page(input) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create page", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, page} ->
+        {:ok, page}
     end
   end
 
