@@ -5,6 +5,7 @@ defmodule ReviewApi.Repo.Migrations.CreateExams do
     create table(:exams) do
       add :name, :string
       add :type, :string
+      add :description, :string
       add :category_id, references(:categories, on_delete: :nothing)
 
       timestamps()

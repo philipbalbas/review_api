@@ -212,6 +212,8 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list of exams"
     field :list_exams, list_of(non_null(:exam)) do
       arg(:filter, :exam_filter)
+
+      middleware(ParseIDs, filter: [category_id: :category])
       resolve(&Resolvers.Tests.list_exams/3)
     end
 
@@ -446,14 +448,36 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create an exam"
-    field :create_exam, :exam do
-      arg(:input, non_null(:create_exam_input))
+    payload field :create_exam do
+      input do
+        field(:input_data, non_null(:exam_create_input))
+      end
+
+      output do
+        field :result, :exam
+      end
+
+      middleware(ParseIDs,
+        input_data: [category_id: :category]
+      )
+
       resolve(&Resolvers.Tests.create_exam/3)
     end
 
     @desc "Update an exam"
-    field :update_exam, :exam do
-      arg(:input, non_null(:update_exam_input))
+    payload field :update_exam do
+      input do
+        field(:input_data, non_null(:exam_update_input))
+      end
+
+      output do
+        field :result, :exam
+      end
+
+      middleware(ParseIDs,
+        input_data: [id: :exam]
+      )
+
       resolve(&Resolvers.Tests.update_exam/3)
     end
 

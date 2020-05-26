@@ -14,18 +14,18 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     {:ok, Tests.get_exam!(id)}
   end
 
-  def create_exam(_, %{input: input}, _) do
+  def create_exam(_, %{input_data: input}, _) do
     case Tests.create_exam(input) do
       {:error, changeset} ->
         {:error,
          message: "Could not create exam", details: ChangesetErrors.error_details(changeset)}
 
       {:ok, exam} ->
-        {:ok, exam}
+        {:ok, %{result: exam}}
     end
   end
 
-  def update_exam(_, %{input: input}, _) do
+  def update_exam(_, %{input_data: input}, _) do
     exam = Tests.get_exam!(input[:id])
 
     case Tests.update_exam(exam, input) do
@@ -34,7 +34,7 @@ defmodule ReviewApiWeb.Resolvers.Tests do
          message: "Could not update exam", details: ChangesetErrors.error_details(changeset)}
 
       {:ok, exam} ->
-        {:ok, exam}
+        {:ok, %{result: exam}}
     end
   end
 

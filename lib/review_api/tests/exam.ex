@@ -20,7 +20,9 @@ defmodule ReviewApi.Tests.Exam do
   def changeset(exam, attrs) do
     exam
     |> cast(attrs, [:name, :type, :description, :category_id])
-    |> validate_required([:name])
+    |> validate_required([:name, :category_id])
+    |> unique_constraint([:name, :category_id])
+    |> assoc_constraint(:category)
   end
 
   def changeset_update_cards(exam, cards) do

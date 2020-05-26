@@ -2,7 +2,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :modern
   import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
-  alias ReviewApi.Tests
+  alias ReviewApi.{Tests, Lecture}
 
   enum :exam_type do
     value(:practice, as: "practice", description: "Practice Test")
@@ -18,8 +18,8 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   node object(:exam) do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
-    field :category_id, non_null(:id)
     field :description, non_null(:string)
+    field(:category, :category, resolve: dataloader(Lecture))
 
     field :cards, list_of(:card) do
       resolve(dataloader(Tests, :cards, args: %{scope: :exam}))
@@ -50,17 +50,18 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :type, :exam_type
   end
 
-  input_object :create_exam_input do
+  input_object :exam_create_input do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
     field :description, non_null(:string)
     field :category_id, non_null(:id)
   end
 
-  input_object :update_exam_input do
+  input_object :exam_update_input do
     field :id, non_null(:id)
     field :name, :string
     field :type, :exam_type
+    field :description, :string
     field :category_id, :id
   end
 
