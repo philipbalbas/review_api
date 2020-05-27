@@ -20,55 +20,54 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   node object(:module) do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
-    field(:category, :category, resolve: dataloader(Lecture))
+    field(:category, non_null(:category), resolve: dataloader(Lecture))
 
-    field(:subjects, list_of(:subject)) do
+    field(:subjects, list_of(non_null(:subject))) do
       resolve(dataloader(Lecture, :subjects, args: %{scope: :module}))
     end
   end
 
   node object(:subject) do
-    field(:name, :string)
+    field(:name, non_null(:string))
     field(:description, :string)
-    field(:module, :module, resolve: dataloader(Lecture))
+    field(:module, non_null(:module), resolve: dataloader(Lecture))
 
-    field :topics, list_of(:topic) do
+    field :topics, list_of(non_null(:topic)) do
       resolve(dataloader(Lecture, :topics, args: %{scope: :subject}))
     end
   end
 
   node object(:topic) do
-    field(:name, :string)
+    field(:name, non_null(:string))
     field(:content, :string)
     field(:description, :string)
-    field(:subject, :subject, resolve: dataloader(Lecture))
+    field(:subject, non_null(:subject), resolve: dataloader(Lecture))
 
-    field :pages, list_of(:page) do
+    field :pages, list_of(non_null(:page)) do
       resolve(dataloader(Lecture, :pages, args: %{scope: :topic}))
     end
 
-    field :cards, list_of(:card) do
+    field :cards, list_of(non_null(:card)) do
       resolve(dataloader(Tests, :cards, args: %{scope: :topic}))
     end
   end
 
   node object(:page) do
-    field(:name, :string)
-    field(:content, :string)
+    field(:name, non_null(:string))
     field(:description, :string)
-    field(:topic, :topic, resolve: dataloader(Lecture))
+    field(:content, :string)
+    field(:topic, non_null(:topic), resolve: dataloader(Lecture))
 
-    field :notes, list_of(:note) do
+    field :notes, list_of(non_null(:note)) do
       resolve(dataloader(Lecture, :notes, args: %{scope: :page}))
     end
   end
 
   node object(:note) do
-    field(:name, :string)
+    field(:name, non_null(:string))
     field(:content, :string)
-    field(:page, :page, resolve: dataloader(Lecture))
-
     field(:description, :string)
+    field(:page, non_null(:page), resolve: dataloader(Lecture))
   end
 
   input_object :category_input_create do

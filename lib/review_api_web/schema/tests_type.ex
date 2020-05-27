@@ -19,9 +19,9 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
     field :description, non_null(:string)
-    field(:category, :category, resolve: dataloader(Lecture))
+    field(:category, non_null(:category), resolve: dataloader(Lecture))
 
-    field :cards, list_of(:card) do
+    field :cards, list_of(non_null(:card)) do
       resolve(dataloader(Tests, :cards, args: %{scope: :exam}))
     end
   end
@@ -30,15 +30,15 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
-    field :choices, list_of(:choice), resolve: dataloader(Tests)
-    field :answers, list_of(:choice), resolve: dataloader(Tests)
+    field :choices, list_of(non_null(:choice)), resolve: dataloader(Tests)
+    field :answers, list_of(non_null(:choice)), resolve: dataloader(Tests)
     field :exams, list_of(:exam), resolve: dataloader(Tests)
-    field :topic, :topic, resolve: dataloader(Lecture)
+    field :topic, non_null(:topic), resolve: dataloader(Lecture)
   end
 
   node object(:choice) do
     field :content, non_null(:string)
-    field :cards, list_of(:card), resolve: dataloader(Tests)
+    field :cards, list_of(non_null(:card)), resolve: dataloader(Tests)
   end
 
   input_object :card_filter do
