@@ -30,14 +30,15 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
-    field :exam_id, :id
-    field :topic_id, :id
     field :choices, list_of(:choice), resolve: dataloader(Tests)
     field :answers, list_of(:choice), resolve: dataloader(Tests)
+    field :exams, list_of(:exam), resolve: dataloader(Tests)
+    field :topic, :topic, resolve: dataloader(Lecture)
   end
 
   node object(:choice) do
     field :content, non_null(:string)
+    field :cards, list_of(:card), resolve: dataloader(Tests)
   end
 
   input_object :card_filter do
@@ -48,6 +49,11 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   input_object :exam_filter do
     field :category_id, :id
     field :type, :exam_type
+  end
+
+  input_object :choice_filter do
+    field :card_id, :id
+    field :search_term, :string
   end
 
   input_object :exam_create_input do
@@ -62,33 +68,30 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :name, :string
     field :type, :exam_type
     field :description, :string
-    field :category_id, :id
   end
 
-  input_object :create_card_input do
+  input_object :card_create_input do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
-    field :topic_id, :id
-    field :exam_id, :id
+    field :topic_id, non_null(:id)
   end
 
-  input_object :create_choice_input do
+  input_object :choice_create_input do
     field :content, non_null(:string)
-    field :card_id, :id
   end
 
-  input_object :upsert_card_choices_input do
+  input_object :card_choices_upsert_input do
     field :card_id, non_null(:id)
     field :choice_ids, non_null(list_of(:id))
   end
 
-  input_object :upsert_question_answers_input do
+  input_object :question_answers_upsert_input do
     field :card_id, non_null(:id)
     field :choice_ids, non_null(list_of(:id))
   end
 
-  input_object :upsert_exam_cards_input do
+  input_object :exam_cards_upsert_input do
     field :exam_id, non_null(:id)
     field :card_ids, non_null(list_of(:id))
   end

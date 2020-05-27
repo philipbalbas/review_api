@@ -6,6 +6,14 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     {:ok, Tests.list_cards(args)}
   end
 
+  def list_choices(_, args, _) do
+    {:ok, Tests.list_choices(args)}
+  end
+
+  def get_choice(%{id: id}, _) do
+    {:ok, Tests.get_choice!(id)}
+  end
+
   def list_exams(_, args, _) do
     {:ok, Tests.list_exams(args)}
   end
@@ -38,43 +46,64 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     end
   end
 
-  def create_card(_, %{input: input}, _) do
+  def create_card(_, %{input_data: input}, _) do
     case Tests.create_card(input) do
       {:error, changeset} ->
         {:error,
          message: "Could not create card", details: ChangesetErrors.error_details(changeset)}
 
       {:ok, card} ->
-        {:ok, card}
+        {:ok, %{result: card}}
     end
   end
 
-  def create_choice(_, %{input: input}, _) do
+  def create_choice(_, %{input_data: input}, _) do
     case Tests.create_choice(input) do
       {:error, changeset} ->
         {:error,
          message: "Could not create an input", details: ChangesetErrors.error_details(changeset)}
 
       {:ok, choice} ->
-        {:ok, choice}
+        {:ok, %{result: choice}}
     end
   end
 
-  def upsert_card_choices(_, %{input: input}, _) do
+  def upsert_card_choices(_, %{input_data: input}, _) do
     card = ReviewApi.Tests.get_card!(input[:card_id])
 
-    ReviewApi.Tests.upsert_card_choices(card, input)
+    case ReviewApi.Tests.upsert_card_choices(card, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not insert choice", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, card} ->
+        {:ok, %{result: card}}
+    end
   end
 
-  def upsert_question_answers(_, %{input: input}, _) do
+  def upsert_question_answers(_, %{input_data: input}, _) do
     question = ReviewApi.Tests.get_card!(input[:card_id])
 
-    ReviewApi.Tests.upsert_question_answers(question, input)
+    case ReviewApi.Tests.upsert_question_answers(question, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not insert answer", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, card} ->
+        {:ok, %{result: card}}
+    end
   end
 
-  def upsert_exam_cards(_, %{input: input}, _) do
+  def upsert_exam_cards(_, %{input_data: input}, _) do
     exam = ReviewApi.Tests.get_exam!(input[:exam_id])
 
-    ReviewApi.Tests.upsert_exam_cards(exam, input)
+    case ReviewApi.Tests.upsert_exam_cards(exam, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not insert card", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, exam} ->
+        {:ok, %{result: exam}}
+    end
   end
 end

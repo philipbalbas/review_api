@@ -17,5 +17,6 @@ defmodule ReviewApi.Tests.Choice do
     choice
     |> cast(attrs, [:content])
     |> validate_required([:content])
+    |> unique_constraint(:content)
   end
 end

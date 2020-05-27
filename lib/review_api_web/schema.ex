@@ -230,6 +230,17 @@ defmodule ReviewApiWeb.Schema do
       arg(:filter, :card_filter)
       resolve(&Resolvers.Tests.list_cards/3)
     end
+
+    @desc "Get a list of choices"
+    field :list_choices, list_of(non_null(:choice)) do
+      arg(:filter, :choice_filter)
+      resolve(&Resolvers.Tests.list_choices/3)
+    end
+
+    field :get_choice, :choice do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Tests.get_choice/2)
+    end
   end
 
   mutation do
@@ -482,32 +493,72 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Create a card"
-    field :create_card, :card do
-      arg(:input, non_null(:create_card_input))
+    payload field :create_card do
+      input do
+        field(:input_data, non_null(:card_create_input))
+      end
+
+      output do
+        field(:result, :card)
+      end
+
+      middleware(ParseIDs, input_data: [topic_id: :topic])
+
       resolve(&Resolvers.Tests.create_card/3)
     end
 
     @desc "Create a choice"
-    field :create_choice, :choice do
-      arg(:input, non_null(:create_choice_input))
+    payload field :create_choice do
+      input do
+        field(:input_data, non_null(:choice_create_input))
+      end
+
+      output do
+        field(:result, :choice)
+      end
+
       resolve(&Resolvers.Tests.create_choice/3)
     end
 
     @desc "Add choices to card"
-    field :upsert_card_choices, :card do
-      arg(:input, non_null(:upsert_card_choices_input))
+    payload field :upsert_card_choices do
+      input do
+        field(:input_data, non_null(:card_choices_upsert_input))
+      end
+
+      output do
+        field(:result, :card)
+      end
+
+      middleware(ParseIDs, input_data: [card_id: :card, choice_ids: :choice])
       resolve(&Resolvers.Tests.upsert_card_choices/3)
     end
 
     @desc "Add answers to question"
-    field :upsert_question_answers, :card do
-      arg(:input, non_null(:upsert_question_answers_input))
+    payload field :upsert_question_answers do
+      input do
+        field(:input_data, non_null(:question_answers_upsert_input))
+      end
+
+      output do
+        field(:result, :card)
+      end
+
+      middleware(ParseIDs, input_data: [card_id: :card, choice_ids: :choice])
       resolve(&Resolvers.Tests.upsert_question_answers/3)
     end
 
     @desc "Add cards to exam"
-    field :upsert_exam_cards, :exam do
-      arg(:input, non_null(:upsert_exam_cards_input))
+    payload field :upsert_exam_cards do
+      input do
+        field(:input_data, non_null(:exam_cards_upsert_input))
+      end
+
+      output do
+        field(:result, :exam)
+      end
+
+      middleware(ParseIDs, input_data: [exam_id: :exam, card_ids: :card])
       resolve(&Resolvers.Tests.upsert_exam_cards/3)
     end
   end

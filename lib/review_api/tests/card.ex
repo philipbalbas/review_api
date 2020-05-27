@@ -13,7 +13,7 @@ defmodule ReviewApi.Tests.Card do
 
     many_to_many :answers, Tests.Choice, join_through: "questions_answers", on_replace: :delete
     many_to_many :choices, Tests.Choice, join_through: "cards_choices", on_replace: :delete
-    many_to_many :exam, Tests.Exam, join_through: "exams_cards", on_replace: :delete
+    many_to_many :exams, Tests.Exam, join_through: "exams_cards", on_replace: :delete
     belongs_to :topic, Lecture.Topic
 
     timestamps()
@@ -23,7 +23,9 @@ defmodule ReviewApi.Tests.Card do
   def changeset(card, attrs) do
     card
     |> cast(attrs, [:question, :rationale, :type, :topic_id])
-    |> validate_required([:question])
+    |> validate_required([:question, :topic_id])
+    |> unique_constraint([:question, :topic_id])
+    |> assoc_constraint(:topic)
   end
 
   def changeset_update_choices(card, choices) do

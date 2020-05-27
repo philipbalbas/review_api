@@ -8,6 +8,17 @@ defmodule ReviewApi.Tests do
 
   alias ReviewApi.Tests.Card
 
+  # @search [Item, Category]
+  # def search(term) do
+  #   pattern = "%#{term}%"
+  #   Enum.flat_map(@search, &search_ecto(&1, pattern))
+  # end
+
+  # defp search_ecto(ecto_schema, pattern) do
+  #   Repo.all from q in ecto_schema,
+  #     where: ilike(q.name, ^pattern) or ilike(q.description, ^pattern)
+  # end
+
   @doc """
   Returns the list of cards.
 
@@ -147,6 +158,30 @@ defmodule ReviewApi.Tests do
   """
   def list_choices do
     Repo.all(Choice)
+  end
+
+  def list_choices(criteria) do
+    Enum.reduce(criteria, Choice, fn
+      {:filter, filter}, query ->
+        query |> filter_choice_with(filter)
+
+      _, query ->
+        query
+    end)
+    |> Repo.all()
+  end
+
+  defp filter_choice_with(query, filter) do
+    Enum.reduce(filter, query, fn
+      {:search_term, search_term}, query ->
+        from(q in query, where: ilike(q.content, ^search_term))
+
+      {:card_id, card_id}, query ->
+        from(q in query,
+          join: c in assoc(q, :cards),
+          where: c.id == ^card_id
+        )
+    end)
   end
 
   @doc """
