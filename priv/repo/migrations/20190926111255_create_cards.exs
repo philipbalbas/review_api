@@ -11,7 +11,7 @@ defmodule ReviewApi.Repo.Migrations.CreateCards do
       timestamps()
     end
 
-    create unique_index(:cards, [:question])
+    create unique_index(:cards, [:question, :topic_id])
     create index(:cards, [:topic_id])
   end
 end
