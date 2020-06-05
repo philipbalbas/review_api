@@ -18,7 +18,7 @@ defmodule ReviewApi.Lecture.Module do
   def changeset(module, attrs) do
     module
     |> cast(attrs, [:name, :description, :category_id])
-    |> validate_required([:name, :category_id])
+    |> validate_required([:name, :description, :category_id])
     |> unique_constraint([:name, :category_id])
     |> assoc_constraint(:category)
   end
