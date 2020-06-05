@@ -121,6 +121,13 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:description, :string)
   end
 
+  input_object :topics_filter do
+    field(:subject_id, type: :id)
+    field(:module_id, type: :id)
+    field(:category_id, type: :id)
+    field(:order, type: :sort_order, default_value: :asc)
+  end
+
   input_object :page_create_input do
     field(:name, non_null(:string))
     field(:description, :string)

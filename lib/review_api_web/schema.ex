@@ -159,11 +159,13 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list topics"
-    field :list_topics, list_of(:topic) do
-      arg(:subject_id, type: :id)
-      arg(:order, type: :sort_order, default_value: :asc)
+    field :list_topics, list_of(non_null(:topic)) do
+      arg(:filter, :topics_filter)
 
-      middleware(ParseIDs, subject_id: :subject)
+      middleware(ParseIDs,
+        filter: [subject_id: :subject, module_id: :module, category_id: :category]
+      )
+
       resolve(&Resolvers.Lecture.list_topics/3)
     end
 
