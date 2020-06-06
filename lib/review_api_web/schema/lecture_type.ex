@@ -20,6 +20,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   node object(:module) do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
+    field(:order, :integer)
     field(:category, non_null(:category), resolve: dataloader(Lecture))
 
     field(:subjects, list_of(non_null(:subject))) do
@@ -84,6 +85,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
   input_object :module_input do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
+    field(:order, :integer)
     field(:category_id, non_null(:id))
   end
 
@@ -91,6 +93,7 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:id, non_null(:id))
     field(:name, :string)
     field(:description, :string)
+    field(:order, :integer)
     field(:category_id, :id)
   end
 

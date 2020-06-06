@@ -6,6 +6,7 @@ defmodule ReviewApi.Lecture.Module do
   schema "modules" do
     field :description, :string
     field :name, :string
+    field :order, :integer
     # field :slug, :string
 
     belongs_to(:category, Category)
@@ -17,7 +18,7 @@ defmodule ReviewApi.Lecture.Module do
   @doc false
   def changeset(module, attrs) do
     module
-    |> cast(attrs, [:name, :description, :category_id])
+    |> cast(attrs, [:name, :description, :order, :category_id])
     |> validate_required([:name, :description, :category_id])
     |> unique_constraint([:name, :category_id])
     |> assoc_constraint(:category)
