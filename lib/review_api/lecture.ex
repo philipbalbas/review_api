@@ -138,7 +138,7 @@ defmodule ReviewApi.Lecture do
   defp filter_subjects_with(query, filter) do
     Enum.reduce(filter, query, fn
       {:order, order}, query ->
-        from(p in query, order_by: [{^order, :id}])
+        from(p in query, order_by: [{^order, :order}])
 
       {:module_id, module_id}, query ->
         from(p in query, where: p.module_id == ^module_id)
