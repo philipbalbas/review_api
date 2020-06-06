@@ -128,7 +128,7 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of modules"
-    field :list_modules, list_of(:module) do
+    field :list_modules, list_of(non_null(:module)) do
       arg(:filter, :module_filter)
 
       middleware(ParseIDs,
