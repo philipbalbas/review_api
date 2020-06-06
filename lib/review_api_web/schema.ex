@@ -142,7 +142,7 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list subjects"
-    field :list_subjects, list_of(:subject) do
+    field :list_subjects, list_of(non_null(:subject)) do
       arg(:filter, :subjects_filter)
 
       middleware(ParseIDs,
