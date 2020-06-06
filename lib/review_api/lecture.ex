@@ -125,16 +125,31 @@ defmodule ReviewApi.Lecture do
   end
 
   def list_subjects(criteria) do
-    query = from(p in Subject)
+    Enum.reduce(criteria, Subject, fn
+      {:filter, filter}, query ->
+        query |> filter_subjects_with(filter)
 
-    Enum.reduce(criteria, query, fn
+      _, query ->
+        query
+    end)
+    |> Repo.all()
+  end
+
+  defp filter_subjects_with(query, filter) do
+    Enum.reduce(filter, query, fn
       {:order, order}, query ->
         from(p in query, order_by: [{^order, :id}])
 
       {:module_id, module_id}, query ->
         from(p in query, where: p.module_id == ^module_id)
+
+      {:category_id, category_id}, query ->
+        from(q in query,
+          join: m in assoc(q, :module),
+          join: c in assoc(m, :category),
+          where: c.id == ^category_id
+        )
     end)
-    |> Repo.all()
   end
 
   @doc """
