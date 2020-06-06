@@ -129,7 +129,12 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list of modules"
     field :list_modules, list_of(:module) do
-      arg(:order, type: :sort_order, default_value: :asc)
+      arg(:filter, :module_filter)
+
+      middleware(ParseIDs,
+        filter: [category_id: :category]
+      )
+
       resolve(&Resolvers.Lecture.list_modules/3)
     end
 

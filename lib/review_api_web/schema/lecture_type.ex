@@ -98,6 +98,11 @@ defmodule ReviewApiWeb.Schema.Types.LectureType do
     field(:category_id, :id)
   end
 
+  input_object :module_filter do
+    field(:category_id, type: :id)
+    field(:order, type: :sort_order, default_value: :asc)
+  end
+
   input_object :subject_create_input do
     field(:name, non_null(:string))
     field(:description, :string)

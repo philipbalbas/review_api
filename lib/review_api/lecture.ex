@@ -21,13 +21,24 @@ defmodule ReviewApi.Lecture do
   end
 
   def list_modules(criteria) do
-    query = from(p in Module)
+    Enum.reduce(criteria, Module, fn
+      {:filter, filter}, query ->
+        query |> filter_modules_with(filter)
 
-    Enum.reduce(criteria, query, fn
-      {:order, order}, query ->
-        from(p in query, order_by: [{^order, :id}])
+      _, query ->
+        query
     end)
     |> Repo.all()
+  end
+
+  defp filter_modules_with(query, filter) do
+    Enum.reduce(filter, query, fn
+      {:order, order}, query ->
+        from(p in query, order_by: [{^order, :order}])
+
+      {:category_id, category_id}, query ->
+        from(p in query, where: p.category_id == ^category_id)
+    end)
   end
 
   @doc """
