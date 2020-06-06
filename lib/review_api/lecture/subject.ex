@@ -6,6 +6,7 @@ defmodule ReviewApi.Lecture.Subject do
   schema "subjects" do
     field :description, :string
     field :name, :string
+    field :order, :integer
 
     belongs_to(:module, Module)
     has_many(:topics, Topic)
@@ -16,7 +17,7 @@ defmodule ReviewApi.Lecture.Subject do
   @doc false
   def changeset(subject, attrs) do
     subject
-    |> cast(attrs, [:name, :description, :module_id])
+    |> cast(attrs, [:name, :description, :order, :module_id])
     |> validate_required([:name, :module_id])
     |> unique_constraint([:name, :module_id])
     |> assoc_constraint(:module)
