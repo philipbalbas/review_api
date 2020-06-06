@@ -7,6 +7,7 @@ defmodule ReviewApi.Lecture.Topic do
     field :content, :string
     field :description, :string
     field :name, :string
+    field :order, :integer
 
     belongs_to(:subject, Subject)
     has_many(:pages, ReviewApi.Lecture.Page)
@@ -18,7 +19,7 @@ defmodule ReviewApi.Lecture.Topic do
   @doc false
   def changeset(topic, attrs) do
     topic
-    |> cast(attrs, [:name, :description, :content, :subject_id])
+    |> cast(attrs, [:name, :description, :content, :order, :subject_id])
     |> unique_constraint([:name, :subject_id])
     |> validate_required([:name, :subject_id])
     |> assoc_constraint(:subject)
