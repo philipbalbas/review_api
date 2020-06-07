@@ -237,6 +237,11 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list of cards"
     field :list_cards, list_of(non_null(:card)) do
       arg(:filter, :card_filter)
+
+      middleware(ParseIDs,
+        filter: [topic_id: :topic, exam_id: :exam, category_id: :category]
+      )
+
       resolve(&Resolvers.Tests.list_cards/3)
     end
 

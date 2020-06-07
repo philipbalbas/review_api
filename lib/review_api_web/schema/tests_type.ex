@@ -45,6 +45,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   input_object :card_filter do
     field :exam_id, :id
     field :topic_id, :id
+    field :category_id, :id
   end
 
   input_object :exam_filter do

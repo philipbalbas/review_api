@@ -36,21 +36,32 @@ defmodule ReviewApi.Tests do
   Returns a list of cards matching the given `criteria`
   """
   def list_cards(criteria) do
-    query = from(p in Card)
+    Enum.reduce(criteria, Card, fn
+      {:filter, filter}, query ->
+        query |> filter_cards_with(filter)
 
-    Enum.reduce(criteria, query, fn
-      {:filter, filters}, query -> filter_cards(filters, query)
+      _, query ->
+        query
     end)
     |> Repo.all()
   end
 
-  defp filter_cards(filters, query) do
+  defp filter_cards_with(query, filters) do
     Enum.reduce(filters, query, fn
-      {:exam_id, id}, query ->
-        from(q in query, where: q.exam_id == ^id)
+      {:exam_id, exam_id}, query ->
+        from(q in query, where: q.exam_id == ^exam_id)
 
-      {:topic_id, id}, query ->
-        from(q in query, where: q.topic_id == ^id)
+      {:topic_id, topic_id}, query ->
+        from(q in query, where: q.topic_id == ^topic_id)
+
+      {:category_id, category_id}, query ->
+        from(q in query,
+          join: t in assoc(q, :topic),
+          join: s in assoc(t, :subject),
+          join: m in assoc(s, :module),
+          join: c in assoc(m, :category),
+          where: c.id == ^category_id
+        )
     end)
   end
 
