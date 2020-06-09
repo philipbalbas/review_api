@@ -102,6 +102,6 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
 
   input_object :card_exams_upsert_input do
     field :card_id, non_null(:id)
-    field :exam_ids, non_null(list_of(:id))
+    field :exam_ids, non_null(list_of(non_null(:id)))
   end
 end
