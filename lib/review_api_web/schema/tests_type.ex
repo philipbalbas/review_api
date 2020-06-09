@@ -33,7 +33,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :type, non_null(:card_type)
     field :choices, list_of(non_null(:choice)), resolve: dataloader(Tests)
     field :answers, list_of(non_null(:choice)), resolve: dataloader(Tests)
-    field :exams, list_of(:exam), resolve: dataloader(Tests)
+    field :exams, list_of(non_null(:exam)), resolve: dataloader(Tests)
     field :topic, non_null(:topic), resolve: dataloader(Lecture)
   end
 
@@ -98,5 +98,10 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   input_object :exam_cards_upsert_input do
     field :exam_id, non_null(:id)
     field :card_ids, non_null(list_of(:id))
+  end
+
+  input_object :card_exams_upsert_input do
+    field :card_id, non_null(:id)
+    field :exam_ids, non_null(list_of(:id))
   end
 end

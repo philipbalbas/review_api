@@ -575,6 +575,20 @@ defmodule ReviewApiWeb.Schema do
       middleware(ParseIDs, input_data: [exam_id: :exam, card_ids: :card])
       resolve(&Resolvers.Tests.upsert_exam_cards/3)
     end
+
+    @desc "Add cards to exam"
+    payload field :upsert_card_exams do
+      input do
+        field(:input_data, non_null(:card_exams_upsert_input))
+      end
+
+      output do
+        field(:result, :card)
+      end
+
+      middleware(ParseIDs, input_data: [card_id: :card, exam_ids: :exam])
+      resolve(&Resolvers.Tests.upsert_card_exams/3)
+    end
   end
 
   enum :sort_order do

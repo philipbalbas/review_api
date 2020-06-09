@@ -4,7 +4,7 @@ defmodule ReviewApi.Tests.Card do
   import Ecto.Changeset
 
   alias ReviewApi.{Tests, Lecture, Repo}
-  alias Tests.Choice
+  alias Tests.{Choice, Exam}
 
   schema "cards" do
     field :question, :string
@@ -69,6 +69,29 @@ defmodule ReviewApi.Tests.Card do
            |> changeset_update_answers(answers)
            |> Repo.update() do
       {:ok, Tests.get_card!(question.id)}
+    else
+      error -> error
+    end
+  end
+
+  def changeset_update_exams(card, exams) do
+    card
+    |> Repo.preload(:exams)
+    |> cast(%{}, [:id])
+    |> put_assoc(:exams, exams)
+  end
+
+  def upsert_card_exams(card, exam_ids) when is_list(exam_ids) do
+    exams =
+      Exam
+      |> where([exam], exam.id in ^exam_ids)
+      |> Repo.all()
+
+    with {:ok, _struct} <-
+           card
+           |> changeset_update_exams(exams)
+           |> Repo.update() do
+      {:ok, Tests.get_card!(card.id)}
     else
       error -> error
     end

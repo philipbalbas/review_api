@@ -127,6 +127,10 @@ defmodule ReviewApi.Tests do
     |> Card.upsert_question_answers(choice_ids)
   end
 
+  def upsert_card_exams(%Card{} = card, %{exam_ids: exam_ids}) do
+    card |> Card.upsert_card_exams(exam_ids)
+  end
+
   @doc """
   Deletes a Card.
 
