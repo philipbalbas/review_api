@@ -333,6 +333,10 @@ defmodule ReviewApiWeb.Schema do
         field :result, :module
       end
 
+      middleware(ParseIDs,
+        input_data: [id: :module, category_id: :category]
+      )
+
       resolve(&Resolvers.Lecture.update_module/3)
     end
 

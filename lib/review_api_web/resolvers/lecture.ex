@@ -98,10 +98,7 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
   end
 
   def update_module(_, %{input_data: input}, _) do
-    {:ok, %{id: internal_id}} =
-      Absinthe.Relay.Node.from_global_id(input[:id], ReviewApiWeb.Schema)
-
-    module = Lecture.get_module!(internal_id)
+    module = Lecture.get_module!(input[:id])
 
     case Lecture.update_module(module, input) do
       {:error, changeset} ->
