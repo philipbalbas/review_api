@@ -374,6 +374,10 @@ defmodule ReviewApi.Tests do
     |> Exam.upsert_exam_cards(card_ids)
   end
 
+  def upsert_exam_topics(%Exam{} = exam, %{topic_ids: topic_ids}) do
+    exam |> Exam.upsert_exam_topics(topic_ids)
+  end
+
   @doc """
   Deletes a Exam.
 

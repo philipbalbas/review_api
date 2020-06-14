@@ -12,6 +12,7 @@ defmodule ReviewApi.Lecture.Topic do
     belongs_to(:subject, Subject)
     has_many(:pages, ReviewApi.Lecture.Page)
     has_many(:cards, ReviewApi.Tests.Card)
+    many_to_many(:exams, ReviewApi.Tests.Exam, join_through: "topics_exams", on_replace: :delete)
 
     timestamps()
   end

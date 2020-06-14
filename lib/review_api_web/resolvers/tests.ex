@@ -119,4 +119,17 @@ defmodule ReviewApiWeb.Resolvers.Tests do
         {:ok, %{result: card}}
     end
   end
+
+  def upsert_exam_topics(_, %{input_data: input}, _) do
+    exam = ReviewApi.Tests.get_exam!(input[:exam_id])
+
+    case ReviewApi.Tests.upsert_exam_topics(exam, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not insert topic", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, exam} ->
+        {:ok, %{result: exam}}
+    end
+  end
 end

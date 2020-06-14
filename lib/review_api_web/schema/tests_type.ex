@@ -25,6 +25,10 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :cards, list_of(non_null(:card)) do
       resolve(dataloader(Tests, :cards, args: %{scope: :exam}))
     end
+
+    field :topics, list_of(non_null(:topic)) do
+      resolve(dataloader(Lecture, :topics, args: %{scope: :topic}))
+    end
   end
 
   node object(:card) do
@@ -103,5 +107,10 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
   input_object :card_exams_upsert_input do
     field :card_id, non_null(:id)
     field :exam_ids, non_null(list_of(non_null(:id)))
+  end
+
+  input_object :exam_topics_upsert_input do
+    field :exam_id, non_null(:id)
+    field :topic_ids, non_null(list_of(non_null(:id)))
   end
 end
