@@ -402,7 +402,7 @@ defmodule ReviewApiWeb.Schema do
       end
 
       middleware(ParseIDs,
-        input_data: [id: :topic]
+        input_data: [id: :topic, subject_id: :subject]
       )
 
       resolve(&Resolvers.Lecture.update_topic/3)
