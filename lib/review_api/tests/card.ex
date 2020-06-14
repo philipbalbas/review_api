@@ -10,6 +10,7 @@ defmodule ReviewApi.Tests.Card do
     field :question, :string
     field :rationale, :string
     field :type, :string
+    field :level, :string
 
     many_to_many :answers, Tests.Choice, join_through: "questions_answers", on_replace: :delete
     many_to_many :choices, Tests.Choice, join_through: "cards_choices", on_replace: :delete
@@ -22,7 +23,7 @@ defmodule ReviewApi.Tests.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:question, :rationale, :type, :topic_id])
+    |> cast(attrs, [:question, :rationale, :type, :level, :topic_id])
     |> validate_required([:question, :topic_id])
     |> unique_constraint([:question, :topic_id])
     |> assoc_constraint(:topic)

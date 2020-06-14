@@ -15,6 +15,15 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     value(:multiple, as: "multiple", description: "Multiple Answers")
   end
 
+  enum :card_level do
+    value(:remember, as: "remember")
+    value(:understand, as: "understand")
+    value(:apply, as: "apply")
+    value(:analyse, as: "analyse")
+    value(:evaluate, as: "evaluate")
+    value(:create, as: "create")
+  end
+
   node object(:exam) do
     field :name, non_null(:string)
     field :type, non_null(:exam_type)
@@ -35,6 +44,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
+    field :level, non_null(:card_level)
     field :choices, list_of(non_null(:choice)), resolve: dataloader(Tests)
     field :answers, list_of(non_null(:choice)), resolve: dataloader(Tests)
     field :exams, list_of(non_null(:exam)), resolve: dataloader(Tests)
@@ -50,6 +60,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :exam_id, :id
     field :topic_id, :id
     field :category_id, :id
+    field :level, :card_level
   end
 
   input_object :exam_filter do
@@ -82,6 +93,7 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :question, non_null(:string)
     field :rationale, :string
     field :type, non_null(:card_type)
+    field :level, non_null(:card_level)
     field :topic_id, non_null(:id)
   end
 

@@ -62,6 +62,9 @@ defmodule ReviewApi.Tests do
           join: c in assoc(m, :category),
           where: c.id == ^category_id
         )
+
+      {:level, level}, query ->
+        from(q in query, where: q.level == ^level)
     end)
   end
 
