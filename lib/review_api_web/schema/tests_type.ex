@@ -111,6 +111,11 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :choice_ids, non_null(list_of(non_null(:id)))
   end
 
+  input_object :card_answers_upsert_input do
+    field :card_id, non_null(:id)
+    field :answer_ids, non_null(list_of(non_null(:id)))
+  end
+
   input_object :question_answers_upsert_input do
     field :card_id, non_null(:id)
     field :choice_ids, non_null(list_of(:id))

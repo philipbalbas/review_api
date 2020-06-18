@@ -125,6 +125,11 @@ defmodule ReviewApi.Tests do
     |> Card.upsert_card_choices(choice_ids)
   end
 
+  def upsert_card_answers(%Card{} = card, %{answer_ids: answer_ids}) do
+    card
+    |> Card.upsert_card_answers(answer_ids)
+  end
+
   def upsert_question_answers(%Card{} = card, %{choice_ids: choice_ids}) do
     card
     |> Card.upsert_question_answers(choice_ids)

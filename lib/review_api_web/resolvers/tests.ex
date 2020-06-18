@@ -94,6 +94,19 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     end
   end
 
+  def upsert_card_answers(_, %{input_data: input}, _) do
+    card = ReviewApi.Tests.get_card!(input[:card_id])
+
+    case ReviewApi.Tests.upsert_card_answers(card, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not insert answer", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, card} ->
+        {:ok, %{result: card}}
+    end
+  end
+
   def upsert_question_answers(_, %{input_data: input}, _) do
     question = ReviewApi.Tests.get_card!(input[:card_id])
 

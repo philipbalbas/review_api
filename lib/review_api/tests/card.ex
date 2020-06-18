@@ -52,6 +52,22 @@ defmodule ReviewApi.Tests.Card do
     end
   end
 
+  def upsert_card_answers(card, answer_ids) when is_list(answer_ids) do
+    answers =
+      Choice
+      |> where([answer], answer.id in ^answer_ids)
+      |> Repo.all()
+
+    with {:ok, _struct} <-
+           card
+           |> changeset_update_answers(answers)
+           |> Repo.update() do
+      {:ok, Tests.get_card!(card.id)}
+    else
+      error -> error
+    end
+  end
+
   def changeset_update_answers(question, answers) do
     question
     |> Repo.preload(:answers)

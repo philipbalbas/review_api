@@ -567,6 +567,20 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Tests.upsert_card_choices/3)
     end
 
+    @desc "Add answers to card"
+    payload field :upsert_card_answers do
+      input do
+        field(:input_data, non_null(:card_answers_upsert_input))
+      end
+
+      output do
+        field(:result, :card)
+      end
+
+      middleware(ParseIDs, input_data: [card_id: :card, answer_ids: :choice])
+      resolve(&Resolvers.Tests.upsert_card_choices/3)
+    end
+
     @desc "Add answers to question"
     payload field :upsert_question_answers do
       input do
