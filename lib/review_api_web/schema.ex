@@ -538,6 +538,21 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Tests.create_choice/3)
     end
 
+    @desc "Update a choice"
+    payload field :update_choice do
+      input do
+        field(:input_data, non_null(:choice_update_input))
+      end
+
+      output do
+        field(:result, :choice)
+      end
+
+      middleware(ParseIDs, input_data: [id: :choice])
+
+      resolve(&Resolvers.Tests.update_choice/3)
+    end
+
     @desc "Add choices to card"
     payload field :upsert_card_choices do
       input do
