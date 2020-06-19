@@ -52,6 +52,13 @@ defmodule ReviewApi.Tests.Card do
     end
   end
 
+  def changeset_update_answers(question, answers) do
+    question
+    |> Repo.preload(:answers)
+    |> cast(%{}, [:id])
+    |> put_assoc(:answers, answers)
+  end
+
   def upsert_card_answers(card, answer_ids) when is_list(answer_ids) do
     answers =
       Choice
@@ -66,13 +73,6 @@ defmodule ReviewApi.Tests.Card do
     else
       error -> error
     end
-  end
-
-  def changeset_update_answers(question, answers) do
-    question
-    |> Repo.preload(:answers)
-    |> cast(%{}, [:id])
-    |> put_assoc(:answers, answers)
   end
 
   def upsert_question_answers(question, answer_ids) when is_list(answer_ids) do

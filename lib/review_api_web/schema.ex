@@ -578,7 +578,7 @@ defmodule ReviewApiWeb.Schema do
       end
 
       middleware(ParseIDs, input_data: [card_id: :card, answer_ids: :choice])
-      resolve(&Resolvers.Tests.upsert_card_choices/3)
+      resolve(&Resolvers.Tests.upsert_card_answers/3)
     end
 
     @desc "Add answers to question"
