@@ -3,6 +3,7 @@ defmodule ReviewApiWeb.Schema do
   use Absinthe.Relay.Schema, :modern
   alias Absinthe.Relay.Node.ParseIDs
   alias ReviewApiWeb.Resolvers
+  alias ReviewApiWeb.Schema.Middleware
   import_types(ReviewApiWeb.Schema.Types)
 
   alias ReviewApi.{Accounts, Lecture, Tests}
@@ -90,6 +91,7 @@ defmodule ReviewApiWeb.Schema do
 
     @desc "Get a list of organizations"
     field :list_organizations, list_of(:organization) do
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Accounts.list_organizations/3)
     end
 
@@ -97,12 +99,14 @@ defmodule ReviewApiWeb.Schema do
     field :get_organization, :organization do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :organization)
       resolve(&Resolvers.Accounts.get_organization/2)
     end
 
     @desc "Get a list of users"
     field :list_users, list_of(:user) do
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Accounts.list_users/3)
     end
 
@@ -110,19 +114,21 @@ defmodule ReviewApiWeb.Schema do
     field :get_user, :user do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :user)
       resolve(&Resolvers.Accounts.get_user/2)
     end
 
     @desc "Get a list of categories"
     field :list_categories, list_of(non_null(:category)) do
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Lecture.list_categories/3)
     end
 
     @desc "Get a single category"
     field :get_category, :category do
       arg(:id, non_null(:id))
-
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :category)
       resolve(&Resolvers.Lecture.get_category/2)
     end
@@ -130,6 +136,8 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list of modules"
     field :list_modules, list_of(non_null(:module)) do
       arg(:filter, :module_filter)
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         filter: [category_id: :category]
@@ -142,6 +150,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_module, :module do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :module)
       resolve(&Resolvers.Lecture.get_module/2)
     end
@@ -149,6 +158,8 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list subjects"
     field :list_subjects, list_of(non_null(:subject)) do
       arg(:filter, :subjects_filter)
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         filter: [module_id: :module, category_id: :category]
@@ -161,6 +172,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_subject, :subject do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :subject)
       resolve(&Resolvers.Lecture.get_subject/2)
     end
@@ -168,6 +180,8 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list topics"
     field :list_topics, list_of(non_null(:topic)) do
       arg(:filter, :topics_filter)
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         filter: [subject_id: :subject, module_id: :module, category_id: :category]
@@ -180,6 +194,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_topic, :topic do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :topic)
       resolve(&Resolvers.Lecture.get_topic/2)
     end
@@ -189,6 +204,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:topic_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, topic_id: :topic)
       resolve(&Resolvers.Lecture.list_pages/3)
     end
@@ -197,6 +213,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_page, :page do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :page)
       resolve(&Resolvers.Lecture.get_page/2)
     end
@@ -206,6 +223,7 @@ defmodule ReviewApiWeb.Schema do
       arg(:page_id, type: :id)
       arg(:order, type: :sort_order, default_value: :asc)
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, page_id: :page)
       resolve(&Resolvers.Lecture.list_notes/3)
     end
@@ -214,6 +232,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_note, :note do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :note)
       resolve(&Resolvers.Lecture.get_note/2)
     end
@@ -222,6 +241,7 @@ defmodule ReviewApiWeb.Schema do
     field :list_exams, list_of(non_null(:exam)) do
       arg(:filter, :exam_filter)
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, filter: [category_id: :category])
       resolve(&Resolvers.Tests.list_exams/3)
     end
@@ -230,6 +250,7 @@ defmodule ReviewApiWeb.Schema do
     field :get_exam, :exam do
       arg(:id, non_null(:id))
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, id: :exam)
       resolve(&Resolvers.Tests.get_exam/2)
     end
@@ -237,6 +258,8 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list of cards"
     field :list_cards, list_of(non_null(:card)) do
       arg(:filter, :card_filter)
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         filter: [topic_id: :topic, exam_id: :exam, category_id: :category]
@@ -248,11 +271,15 @@ defmodule ReviewApiWeb.Schema do
     @desc "Get a list of choices"
     field :list_choices, list_of(non_null(:choice)) do
       arg(:filter, :choice_filter)
+
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Tests.list_choices/3)
     end
 
     field :get_choice, :choice do
       arg(:id, non_null(:id))
+
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Tests.get_choice/2)
     end
   end
@@ -268,6 +295,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :organization
       end
 
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Accounts.create_organization/3)
     end
 
@@ -305,6 +333,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :category
       end
 
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Lecture.create_category/3)
     end
 
@@ -318,6 +347,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :category
       end
 
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Lecture.update_category/3)
     end
 
@@ -331,6 +361,7 @@ defmodule ReviewApiWeb.Schema do
         field :result, :module
       end
 
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Lecture.create_module/3)
     end
 
@@ -343,6 +374,8 @@ defmodule ReviewApiWeb.Schema do
       output do
         field :result, :module
       end
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         input_data: [id: :module, category_id: :category]
@@ -361,6 +394,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :subject
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [module_id: :module]
       )
@@ -377,6 +412,8 @@ defmodule ReviewApiWeb.Schema do
       output do
         field :result, :subject
       end
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         input_data: [id: :subject, module_id: :module]
@@ -395,6 +432,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :topic
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [subject_id: :subject]
       )
@@ -411,6 +450,8 @@ defmodule ReviewApiWeb.Schema do
       output do
         field :result, :topic
       end
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         input_data: [id: :topic, subject_id: :subject]
@@ -429,6 +470,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :page
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [topic_id: :topic]
       )
@@ -445,6 +488,8 @@ defmodule ReviewApiWeb.Schema do
       output do
         field :result, :page
       end
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         input_data: [id: :page]
@@ -463,6 +508,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :note
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [page_id: :page]
       )
@@ -480,6 +527,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :note
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [id: :note]
       )
@@ -496,6 +545,8 @@ defmodule ReviewApiWeb.Schema do
       output do
         field :result, :exam
       end
+
+      middleware(Middleware.Authenticate)
 
       middleware(ParseIDs,
         input_data: [category_id: :category]
@@ -531,8 +582,8 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :card)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [topic_id: :topic])
-
       resolve(&Resolvers.Tests.create_card/3)
     end
 
@@ -546,6 +597,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :choice)
       end
 
+      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Tests.create_choice/3)
     end
 
@@ -559,8 +611,8 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :choice)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [id: :choice])
-
       resolve(&Resolvers.Tests.update_choice/3)
     end
 
@@ -574,6 +626,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :card)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [card_id: :card, choice_ids: :choice])
       resolve(&Resolvers.Tests.upsert_card_choices/3)
     end
@@ -588,6 +641,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :card)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [card_id: :card, answer_ids: :choice])
       resolve(&Resolvers.Tests.upsert_card_answers/3)
     end
@@ -602,6 +656,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :card)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [card_id: :card, choice_ids: :choice])
       resolve(&Resolvers.Tests.upsert_question_answers/3)
     end
@@ -616,6 +671,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :exam)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [exam_id: :exam, card_ids: :card])
       resolve(&Resolvers.Tests.upsert_exam_cards/3)
     end
@@ -630,6 +686,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :card)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [card_id: :card, exam_ids: :exam])
       resolve(&Resolvers.Tests.upsert_card_exams/3)
     end
@@ -644,6 +701,7 @@ defmodule ReviewApiWeb.Schema do
         field(:result, :exam)
       end
 
+      middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [exam_id: :exam, topic_ids: :topic])
       resolve(&Resolvers.Tests.upsert_exam_topics/3)
     end

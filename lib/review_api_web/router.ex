@@ -3,6 +3,7 @@ defmodule ReviewApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug ReviewApi.Plugs.SetCurrentUser
   end
 
   scope "/" do
