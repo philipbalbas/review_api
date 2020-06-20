@@ -23,7 +23,7 @@ defmodule ReviewApiWeb.Schema.Types.AccountsType do
     field(:username, :string)
     field(:first_name, :string)
     field(:last_name, :string)
-    field(:email, :string)
+    field(:email, non_null(:string))
     field(:organization_id, :id)
     field(:role, :string)
   end
