@@ -102,12 +102,12 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Get a list of users"
-    field :users, list_of(:user) do
+    field :list_users, list_of(:user) do
       resolve(&Resolvers.Accounts.list_users/3)
     end
 
     @desc "Get a user"
-    field :user, :user do
+    field :get_user, :user do
       arg(:id, non_null(:id))
 
       middleware(ParseIDs, id: :user)
@@ -279,8 +279,19 @@ defmodule ReviewApiWeb.Schema do
     end
 
     @desc "Signup a user"
-    field :signup, :user do
-      arg(:input, non_null(:user_input))
+    payload field :signup do
+      input do
+        field :input_data, non_null(:user_signup_input)
+      end
+
+      output do
+        field :result, :user
+      end
+
+      middleware(ParseIDs,
+        input_data: [organization_id: :organization]
+      )
+
       resolve(&Resolvers.Accounts.signup/3)
     end
 

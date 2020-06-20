@@ -21,13 +21,13 @@ defmodule ReviewApi.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     required_fields = [
-      :username,
       :email,
       :password,
       :organization_id
     ]
 
     optional_fields = [
+      :username,
       :first_name,
       :last_name,
       :exam_batch,

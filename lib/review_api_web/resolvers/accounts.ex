@@ -43,16 +43,16 @@ defmodule ReviewApiWeb.Resolvers.Accounts do
     end
   end
 
-  def signup(_, %{input: input}, _) do
+  def signup(_, %{input_data: input}, _) do
     case Accounts.create_user(input) do
       {:error, changeset} ->
         {
           :error,
-          message: "Could not signup user", details: ChangesetErrors.error_details(changeset)
+          message: "Could not create user", details: ChangesetErrors.error_details(changeset)
         }
 
       {:ok, user} ->
-        {:ok, user}
+        {:ok, %{result: user}}
     end
   end
 end
