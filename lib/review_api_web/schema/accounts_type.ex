@@ -14,7 +14,7 @@ defmodule ReviewApiWeb.Schema.Types.AccountsType do
     value(:admin, as: "admin")
   end
 
-  node object(:session) do
+  object(:session) do
     field :token, non_null(:string)
     field :user, non_null(:user)
   end
