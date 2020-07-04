@@ -55,4 +55,12 @@ defmodule ReviewApiWeb.Resolvers.Accounts do
         {:ok, %{result: user}}
     end
   end
+
+  def me(_, _, %{context: %{current_user: user}}) do
+    {:ok, user}
+  end
+
+  def me(_, _, _) do
+    {:ok, nil}
+  end
 end

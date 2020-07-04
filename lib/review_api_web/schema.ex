@@ -119,6 +119,11 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Accounts.get_user/2)
     end
 
+    @desc "Get the currently signed-in user"
+    field :me, :user do
+      resolve(&Resolvers.Accounts.me/3)
+    end
+
     @desc "Get a list of categories"
     field :list_categories, list_of(non_null(:category)) do
       middleware(Middleware.Authenticate)
