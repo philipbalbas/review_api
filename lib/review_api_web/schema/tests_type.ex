@@ -97,6 +97,15 @@ defmodule ReviewApiWeb.Schema.Types.TestsType do
     field :topic_id, non_null(:id)
   end
 
+  input_object :card_update_input do
+    field :id, non_null(:id)
+    field :question, :string
+    field :rationale, :string
+    field :type, :card_type
+    field :level, :card_level
+    field :topic_id, :id
+  end
+
   input_object :choice_create_input do
     field :content, non_null(:string)
   end

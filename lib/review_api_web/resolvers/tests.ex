@@ -61,6 +61,19 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     end
   end
 
+  def update_card(_, %{input_data: input}, _) do
+    card = Tests.get_card!(input[:id])
+
+    case Tests.update_card(card, input) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not update card", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, card} ->
+        {:ok, %{result: card}}
+    end
+  end
+
   def create_choice(_, %{input_data: input}, _) do
     case Tests.create_choice(input) do
       {:error, changeset} ->

@@ -579,6 +579,8 @@ defmodule ReviewApiWeb.Schema do
         field :result, :exam
       end
 
+      middleware(Middleware.Authenticate)
+
       middleware(ParseIDs,
         input_data: [id: :exam]
       )
@@ -599,6 +601,25 @@ defmodule ReviewApiWeb.Schema do
       middleware(Middleware.Authenticate)
       middleware(ParseIDs, input_data: [topic_id: :topic])
       resolve(&Resolvers.Tests.create_card/3)
+    end
+
+    @desc "Update an exam"
+    payload field :update_card do
+      input do
+        field(:input_data, non_null(:card_update_input))
+      end
+
+      output do
+        field :result, :card
+      end
+
+      middleware(Middleware.Authenticate)
+
+      middleware(ParseIDs,
+        input_data: [id: :card, topic_id: :topic]
+      )
+
+      resolve(&Resolvers.Tests.update_card/3)
     end
 
     @desc "Create a choice"
