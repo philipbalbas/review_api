@@ -273,6 +273,15 @@ defmodule ReviewApiWeb.Schema do
       resolve(&Resolvers.Tests.list_cards/3)
     end
 
+    @desc "Get a single card"
+    field :get_card, :card do
+      arg(:id, non_null(:id))
+
+      middleware(Middleware.Authenticate)
+      middleware(ParseIDs, id: :card)
+      resolve(&Resolvers.Tests.get_card/2)
+    end
+
     @desc "Get a list of choices"
     field :list_choices, list_of(non_null(:choice)) do
       arg(:filter, :choice_filter)

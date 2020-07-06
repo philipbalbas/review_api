@@ -6,6 +6,10 @@ defmodule ReviewApiWeb.Resolvers.Tests do
     {:ok, Tests.list_cards(args)}
   end
 
+  def get_card(%{id: id}, _) do
+    {:ok, Tests.get_card!(id)}
+  end
+
   def list_choices(_, args, _) do
     {:ok, Tests.list_choices(args)}
   end
