@@ -210,7 +210,6 @@ defmodule ReviewApiWeb.Resolvers.Lecture do
   end
 
   def update_note(_, %{input_data: input}, _) do
-    IO.inspect(input)
     note = Lecture.get_note!(input[:id])
 
     case Lecture.update_note(note, input) do

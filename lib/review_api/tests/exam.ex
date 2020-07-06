@@ -68,8 +68,6 @@ defmodule ReviewApi.Tests.Exam do
       |> where([topic], topic.id in ^topic_ids)
       |> Repo.all()
 
-    IO.inspect(topics)
-
     with {:ok, _struct} <-
            exam
            |> changeset_update_topics(topics)
